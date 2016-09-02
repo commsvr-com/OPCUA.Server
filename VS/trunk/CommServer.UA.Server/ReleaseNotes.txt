@@ -1,0 +1,250 @@
+#####################################################################
+# CommServer UA release notes
+#
+# $LastChangedDate$
+# $Rev$
+# $LastChangedBy$
+# $URL$
+# $Id$ 
+#
+#####################################################################
+
+#####################################################################
+# CommServer UA 1.00.33 - Internal release
+# 2013-04-29
+#####################################################################
+- Added place holder for External Data Source
+- Added model to test complex datatypes.
+
+#####################################################################
+# CommServer UA 1.00.32 Bravo Sierra
+# 2011.05.19
+#####################################################################
+
+New version 1.00.32 of CommServer UA is available now. 
+This is only bugfix release. The main changes are listed below:
+- Resolved issue with license installation ("wrong hardware key");
+- Resolved issue with displaying information about license failure.
+
+
+Nowa wersja 1.00.32 oprogramowania CommServer UA jest już dostępna. 
+Ten release zawiera tylko drobne poprawki. Do najważniejszych zmian i nowości zaliczyć można:
+- Rozwiązano problem z instalacją licencji (i informacją o złym kluczu sprzętowym);
+- Rozwiązano problem z wyświetlaniem informacji o problemie z licencją.
+
+This release includes:
+    * 4.00.02-CMCORE Bravo Kilo
+    * 2.0.108-NETAPI - Alpha Echo 
+    * 3.70.08-DPP - Bravo Mike
+    * 4.00.02-CLIB Bravo Lima
+    * 1.00.04-CRSC - Bravo Golf
+    * 3.10.02-OPCV - Bravo November
+    * 1.01.326.1-OPCF UA SDK 
+    * 3.00.02-UA Model Designer Bravo Quebec
+    * 1.00.12-OPC UA Viewer Bravo Romeo
+
+#####################################################################
+# CommServer UA 1.00.30
+#####################################################################
+
+New version 1.00.30 of CommServer UA is available now. 
+The main changes and new functionalities are listed below:
+- CommServer UA and CommServer UA Wrapper work in 64-bit environment as 32-bit applications.
+- CommServer UA software package is enhanced with a fully functional, OPC UA demo client - OPC UA Viewer. Using this client it is possible to connect to any OPC UA server using different types of security, browse address space, read/write from/to data and much, much more (see: http://www.commsvr.com/Products/OPCUA/OPCUAViewer.aspx).
+- Installation procedure has been improved. Now  the operating system components (including configuration of HTTP channels, firewall, certificates access, etc.) are configured automatically.
+- Some improvements to the user interface.
+- Certificates support has been improved to provide higher level of security during the client - server communication. 
+- Synchronization with OPC Foundation SDK 1.01.326.0.
+- New location (based on ALLUSERSPROFILE) of configuration and log files (see product manual for details).
+- Improved licensing management.
+- Improved support for Windows Vista, 7 and 2008.
+- New version OPC UA Viewer 1.00.10 is included.
+- Some minor bug fixes and improvements.
+
+Nowa wersja 1.00.30 oprogramowania CommServer UA jest już dostępna. 
+Do najważniejszych zmian zaliczyć można:
+- CommServer UA oraz CommServer UA Wrapper działają w systemie 64-bitowym jako aplikacje 32-bitowe.
+- Do pakietu oprogramowania CommServer UA dołączony został w pełni funkcjonalny, klient OPC UA - OPC UA Viewer. Dzięki niemu można szybko podłączyć się do dowolnego serwera OPC UA korzystając z dowolnego rodzaju zabezpieczeń, przeglądać jego przestrzeń adresową,  zapisywać i odczytywać dane, a także wiele więcej (zobacz także: http://www.commsvr.com/Products/OPCUA/OPCUAViewer.aspx).
+- Ulepszona procedura instalacji, która automatycznie konfiguruje system operacyjny (w tym m.in. kanały HTTP, zaporę sieciową, dostęp do certyfikatów itp.).
+- Drobne poprawki interfejsu użytkownika.
+- Ulepszono obsługę certyfikatów zapewniając jeszcze wyższy poziom bezpieczeństwa podczas komunikacji klient - serwer.
+- Zsynchronizowano z OPC Foundation SDK 1.01.326.0.
+- Pliki konfiguracyjne i logów mają są umieszczane w nowej lokalizacji (bazującej na ALLUSERSPROFILE) (szczegóły opisano w dokumentacji do produktu).
+- Ulepszono sposób zarządzania licencjami w oprogramowaniu CommServer.
+- Poprawiono wsparcie dla systemów operacyjnych jak Windows Vista, 7 i 2008.
+- Dołączono nową wersję oprogramowania OPC UA Viewer 1.00.10.
+- Drobne poprawki i ulepszenia.
+
+Libraries used in this release:
+    * 4.00.00-CMCORE Alpha Victor
+    * 2.0.108 - NETAPI - Alpha Echo 
+    * 3.70.06-DPP - Alpha Yankee
+    * 4.00.00-CLIB Alpha Whiskey
+    * 1.00.04-CRSC   
+
+Changes based on ITR:
+UA-2080	Release 1.00.30
+UA-2679 CSUA: On Windows XP: WARNING: Could not load config file specified in the installation configuration...
+UA-2302	Prepare read-me documentation
+UA-2553	CSUA does not start
+UA-2634	Enter unlock code window don't work when Alt+K is pressed.
+UA-2142	User who starts the server does not have access to server address space
+UA-1873	URN and PC name
+UA-2087	Modify the uninstall procedure
+UA-2205	CSUA: Remove all CHM files from setup project
+UA-2463	Useless link to DataPorter help in CSUA
+UA-2256	Wrong help address in CSUA monitor
+UA-2460	CSUA: Wrong application data folder is set in product manifest
+UA-2348	Changes referenced to Licensing
+UA-2258	No access to CSUA certificate in the store
+UA-2083	Synchronize ServerForm withn the latest SDK release
+UA-2084	Application certificate cannot be found
+UA-2082	Modify the installation procedure
+UA-1748	Modify documentation comments in the OPCF SDK
+UA-2598	Missing license for manually launching CommServer
+UA-2140	Remove information about assemblies from TransportConfiguration in uasconfig
+UA-2139	Improve CSUA installer icon
+UA-2086	Modify getting of the installation folder path
+UA-2216	CSUA: add solution file (ASMD address space) to allow user to edit server AS easilly.
+UA-2354	Modify setup to install content files as CommonApplicationData
+UA-2473	Split AboutForm and LicenseForm
+UA-2449	Implement listener for License warning
+UA-2444	Implement software unlocking codes
+UA-2429	Improve location of the logs for CommServer UA package software	jbudzynski	Resolved
+UA-2215	Add license tab to CSUA console
+UA-2561	Add namespace in the AssemblyVersionInfo
+UA-2212	Update to SDK 1.01.324.1
+UA-2434	Update to 1.326 SDK version
+UA-2085	The ApplicationInstance from SDK does not allow to open custom configuration
+UA-2154	Update to 1.320 SDK version
+UA-1826	Draw CSUA architecture diagram
+UA-2072	Provide continues access to the Internet for ADI aware online CommsErverUA
+UA-2141	Add OPCUAViewer to the CommServerUA setup
+UA-2207	CSUA: Wrapper functionality on x64 system
+UA-2646	Cumulative bugfix issue before release
+
+
+#####################################################################
+# CommServer UA rel_1_00_22 (Victor)
+# 2009.11.05
+#####################################################################
+CommServer to pakiet oprogramowania komunikacyjnego do zarz...dzania transferem danych. Jest to w pe??ni konfigurowalny serwer OPC Unified Architecture (OPC UA). Wbudowane technologie i algorytmy pozwalaj... na inteligentn... transmisj(tm) danych automatycznie dostosowuj...c jej parametry do potrzeb użytkownika lub procesu.
+Jest to pierwsza publiczna wersja CommServer'a UA dost(tm)pna w dziale download wortalu CommServer (wersja dost(tm)pna z licencj... demo). CommServer UA zosta?? przetestowany pod k...tem kompatybilności i współdzia??ania z innymi produktami podczas OPC Interoperability Workshop (2009) w Norymberdze, Niemcy. OPC UA Address Space Model Designer w wersji 2.10.00 i OPC Viewer w wersji 3.00.02 s... komponentami CommServer'a UA w wersji 1.00. 20.
+CommServer UA wspiera interfejs serwera OPC UA i pozwala na udost(tm)pnianie danych z trzech źródeł (nazywanych w oprogramowaniu DataSources):
+* CommServer - silnik komunikacyjnych (wbudowane technologie i algorytmy pozwalaj... na inteligentn... transmisj(tm) danych automatycznie dostosowuj...c... jej parametry do potrzeb użytkownika lub procesu)
+* Klient OPC DA (dzia??a jako Wrapper OPC DA z w pe??ni konfigurowaln... przestrzeni... adresow...)
+* Symulator (dane s... symulowane)
+
+CommServer is a package of communication software to manage data transfer. It's a fully configurable OPC Unified Architecture (OPC UA) server that provides a multi-protocol, multi-medium and multi-channel redundant access to physical process control device data.
+This is the first time when CommServer UA is available for public download (with a demo license). CommServer UA was tested for Compliance and Interoperability at OPC Interoperability Workshop (2009) in Nuremberg, Germany. OPC UA Address Space Model Designer rel. 2.10.00 and OPC Viewer rel. 3.00.02 are components of CommServer UA rel. 1.00.20.
+CommServer supports OPC UA server interface and allows serving data from three data sources:
+* CommServer Communication Engine (multi-protocol, multi-medium and multi-channel redundant access to physical process control device data)
+* OPC DA Client (works as OPC DA wrapper with fully configurable address space)
+* Simulator (data are simulated)
+
+* CSUA setup Task UA-1988 Release 1.00.22 - CSUA - Victor mzbrzezny In Progress     
+* CSUA setup Any UA-1980 Test SDK installation jbudzynski Resolved   
+* Configuration Bug UA-1981 Synchronize configuration with 305 release jbudzynski Resolved     
+* Configuration Bug UA-1984 Overlapping certificates stores with OPCF Server mzbrzezny Resolved     
+* Configuration Bug UA-1970 Cannot connect server using HTTP mzbrzezny Resolved     
+* Configuration Bug UA-1986 Sever fails to registered in the discovery server mzbrzezny Resolved     
+* CSUA setup Bug UA-1979 Adopt instalation procedure from SDK mzbrzezny Resolved     
+* SDKCompatibility Bug UA-1985 Server always rejects certificate from UUClient jbudzynski Resolved 
+
+#####################################################################
+# CommServer UA rel_1_00_20 (codename: IOP)
+# 2009.10.28
+#####################################################################
+New version 1.00.20 of  CommServer UA software is released. 
+CommServer is a package of communication software to manage data transfer. It's a fully configurable OPC Unified Architecture (OPC UA) server that provides a multi-protocol, multi-medium and multi-channel redundant access to physical process control device data. 
+This is the first time when CommServer UA is available for public download (with a demo license). CommServer UA was tested for Compliance and Interoperability at OPC Interoperability Workshop (2009) in Nuremberg, Germany. OPC UA Address Space Model Designer rel. 2.10.00 and OPC Viewer rel. 3.00.02 are components of CommServer UA rel.  1.00.20.  
+CommServer supports OPC UA server interface and allows serving data from three data sources: 
+- CommServer Communication Engine (multi-protocol, multi-medium and multi-channel redundant access to physical process control device data), 
+- OPC DA Client (works as OPC DA wrapper with fully configurable address space) 
+- Simulator (data are simulated).
+
+See online help (http://www.commsvr.com/UAModelDesigner/Index.aspx?topic=html/8792522c-01ff-49f8-ba2a-e3df7abf6140.htm )
+Download the latest version of CommServer UA 1.00.20
+
+CommServer UA 1.00.20
+
+Nowe oprogramowanie CommServer UA w wersji 1.00.20 jest ju?? dost(tm)pne.
+CommServer to pakiet oprogramowania komunikacyjnego do zarz...dzania transferem danych. Jest to w pełni konfigurowalny serwer OPC Unified Architecture (OPC UA). Wbudowane technologie i algorytmy pozwalaj... na inteligentn... transmisj(tm) danych automatycznie dostosowuj...c... jej parametry do potrzeb użytkownika lub procesu.
+Jest to pierwsza publiczna wersja CommServer'a UA dost(tm)pna w dziale download wortalu CommServer (wersja dost(tm)pna z licencj... demo). CommServer UA zosta?? przetestowany pod k...tem kompatybilności i współdziałania z innymi produktami podczas OPC Interoperability Workshop (2009) w Norymberdze, Niemcy. OPC UA Address Space Model Designer w wersji 2.10.00 i OPC Viewer w wersji 3.00.02 s... komponentami CommServer'a UA w wersji  1.00. 20.
+CommServer UA wspiera interfejs serwera OPC UA i pozwala na  udost(tm)pnianie danych z trzech źródeł (nazywanych w oprogramowaniu DataSources):
+- CommServer - silnik komunikacyjnych (wbudowane technologie i algorytmy pozwalaj... na inteligentn... transmisj(tm) danych automatycznie dostosowuj...c... jej parametry do potrzeb użytkownika lub procesu)
+- Klient OPC DA (dzia??a jako Wrapper OPC DA z w pe??ni konfigurowaln... przestrzeni... adresow...)
+- Symulator (dane s... symulowane)
+
+Zobacz online help (http://www.commsvr.com/UAModelDesigner/Index.aspx?topic=html/8792522c-01ff-49f8-ba2a-e3df7abf6140.htm)
+Pobierz najnowsz... wersi(tm) CommServer UA 1.00.20
+CommServer UA w wersji 1.00.20
+New version 1.00.20 of CommServer UA. The main changes and new functionalities are listed below:
+- Certificate for OPC compatibility at OPC Interoperability Workshop in Nurnberg, Germany.
+- CommServer Monitor allows to select what type of the configuration is used (CommServer DA Classic or CommServer Engine in UA Server)
+- Implemented property access mechanism. 
+- Added CommServer bindings architecture. 
+- Small improvements and bug fixes.
+
+
+
+UA-1945  	CommServer Monitor should allow to select what type of the configuration is used (CommServer DA Classic or CommServer Engine in UA Server)  
+UA-1924 	Release softwrae Rel1.00.20 
+UA-1749 	CommServerUA: Add product installer 
+UA-1940 	Remove generating of the DefaultValue in Simulator 
+UA-1827 	Resolve the problem with certificates 
+UA-1857 	There are errors reported in the application log while starting the server. 
+UA-1856 	Wrong types of variables values for some data sources. 
+UA-1852 	NodesFactory.cs reports error in the log 
+UA-1934 	SimulatorDictionary causes unhandled exception at runtime 
+UA-1944 	OpcCoreSetup is in worning state 
+UA-1941 	OPC_UA_ASMD_48.ico' is missed in the repo. 
+UA-1943 	missed firl CommServer_UA_48.ico in the repo 
+UA-1860 	Ignore selected files in the PR35-ASMD_Plugins 
+UA-1859 	Modify model for DI 
+UA-1830 	Auto-generated values in configuration should be read-only 
+UA-1764 	ConfigurationFileNameEditor - copy all properties 
+UA-1760 	Add tree view to CommServer data bindings selection GUI 
+UA-1866 	Fix assert when the NumericId from CSV file is duplicated 
+UA-1698 	Test and Verify fixes to Wrong name space provided and Add option to control simulator 
+UA-1891 	Implement property access mechanism. 
+UA-1889 	Create banner to the installer 
+UA-1938 	Update to 1.01.305.0 Testing OPCF SDK 
+
+#####################################################################
+# CommServer UA rel_1_00_10 (codename: Internal IOP)
+# 2009.10.28
+#####################################################################
+
+UA-1747  	Test invalidation mechanism for nodes values.  
+UA-1801 	Save operation via OPC Client is not working 
+UA-1792 	Fix opening of the CommServer config file 
+UA-1793 	Fix copying script fo ServerConfigurtation project 
+UA-1720 	Bug in building script for DP.DemoSimulator 
+UA-1823 	Update Relese information in the server status 
+UA-1733 	BuildModels does not work 
+UA-1738 	Add Opc.Ua.ClientControls.xml 
+UA-1804 	Test read/write using OPC Da Wrapper. 
+UA-1736 	Add GUI form for the server 
+
+UA-1716 	Remove "Samples" folder 
+UA-1717 	Remove word "Sample" from all file names 
+UA-1718 	Remove references to Controls project 
+UA-1683 	Cleanup names of classes, folders and projects 
+UA-1732 	Review modification after reorganization of the solution 
+UA-1765 	Move the Helpers.cs class to main project folder. 
+UA-1805 	Test Read/Write to CommServer DS 
+UA-1820 	Test server on loccal machine 
+UA-1727 	Adapt server configuration 
+UA-1758 	Add methods which can create in simulator values of the particular data types 
+UA-1753 	Create test configuration 
+UA-1767 	Prepare configurations 
+UA-1686 	Modify configuration to define models that the node managr must load. 
+UA-1685 	Design Write value architecture 
+UA-1679 	Conversion data types architecture 
+UA-1755 	Implement I4UAServer for CommServer 
+UA-1756 	Add CommServer bindings to the server configuration schema 
+UA-1757 	Implement data bindings for CommServer 
+UA-1689 	Prepare CommServer bindings architecture. 
+UA-1754 	Test program: TestProgram from OPCSampleCode 
+UA-1724 	Release: IOP 2009; Wrapper CommSeverUA 
