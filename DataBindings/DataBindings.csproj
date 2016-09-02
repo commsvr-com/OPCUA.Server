@@ -1,0 +1,210 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{303CFB1D-CEF3-4ECC-B9FD-C7DFC6308810}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>CAS.UA.Server.DataBindings</RootNamespace>
+    <AssemblyName>CAS.UA.Server.DataBindings</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>cas.snk</AssemblyOriginatorKeyFile>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkProfile />
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="CAS.CodeProtect">
+      <HintPath>..\..\CommonBinaries\PR36-CAS_MAIN_CORE_PCKG\50000\CAS.CodeProtect.dll</HintPath>
+    </Reference>
+    <Reference Include="CAS.CommonBus">
+      <HintPath>..\..\CommonBinaries\PR37-CAS_LIB_PCKG\50000\CAS.CommonBus.dll</HintPath>
+    </Reference>
+    <Reference Include="CAS.DeviceSimulator">
+      <HintPath>..\..\CommonBinaries\PR37-CAS_LIB_PCKG\50000\CAS.DeviceSimulator.dll</HintPath>
+    </Reference>
+    <Reference Include="CAS.OpcNetApi.350">
+      <HintPath>..\..\CommonBinaries\EX01-OPCFoundation_NETApi\CAS.OpcNetApi.350.dll</HintPath>
+    </Reference>
+    <Reference Include="CAS.RTLib">
+      <HintPath>..\..\CommonBinaries\PR36-CAS_MAIN_CORE_PCKG\50000\CAS.RTLib.dll</HintPath>
+    </Reference>
+    <Reference Include="CAS.RTLibComm">
+      <HintPath>..\..\CommonBinaries\PR36-CAS_MAIN_CORE_PCKG\50000\CAS.RTLibComm.dll</HintPath>
+    </Reference>
+    <Reference Include="CAS.UA.IServerConfiguration, Version=1.0.0.32204, Culture=neutral, PublicKeyToken=8832ff1a67ea61a3, processorArchitecture=MSIL">
+      <HintPath>..\packages\CAS.UA.IServerConfiguration.1.00.00\lib\net35\CAS.UA.IServerConfiguration.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Opc.Ua.Core, Version=1.0.240.1, Culture=neutral, PublicKeyToken=22186a540fc0b044, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\CommonBinaries\OPCFSDK.Binaries\Opc.Ua.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="DataBindingsManager.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="DataBindingsManager.Designer.cs">
+      <DependentUpon>DataBindingsManager.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Helpers.cs" />
+    <Compile Include="InstancesConfigurationDictionary.cs" />
+    <Compile Include="NodesIdentifiersCollection.cs" />
+    <Compile Include="OPCDAClient\Client.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AssemblyInfo.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+    <Compile Include="Simulator\SimulatorDictionary.cs" />
+    <Compile Include="TraceEvent.cs" />
+    <Compile Include="VariableMediator.cs" />
+    <Compile Include="WrappedBaseObjectState.cs" />
+    <Compile Include="WrappedMethodState.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="cas.snk" />
+    <None Include="Help\ASModelDesigner.chm" />
+    <None Include="packages.config" />
+    <None Include="Properties\AssemblyInfo.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>AssemblyInfo.cs</LastGenOutput>
+    </None>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\PR21-CommServer\CommServerConsoleInterface\CR.CommServerConsoleInterface.csproj">
+      <Project>{CE7BA276-5ACF-44FE-B24A-F91F6A0B0436}</Project>
+      <Name>CR.CommServerConsoleInterface</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\PR21-CommServer\CommServer\CR.CommServer.csproj">
+      <Project>{E1351D09-7241-44C3-A292-8D46E322A61D}</Project>
+      <Name>CR.CommServer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\PR24-Biblioteka\DataPorterConfigLib\DataPorterConfigLib.csproj">
+      <Project>{6A9D0309-3FCA-4A32-917D-68BD883B3F37}</Project>
+      <Name>DataPorterConfigLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\PR24-Biblioteka\NetworkConfigLib\BK.NetworkConfigLib.csproj">
+      <Project>{531FA61A-6106-442D-9380-B4991DCECF19}</Project>
+      <Name>BK.NetworkConfigLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\PR24-Biblioteka\OPCClient.Da\BK.OPCClient.Da.csproj">
+      <Project>{4B443668-AE54-4D84-A840-CD5973296D27}</Project>
+      <Name>BK.OPCClient.Da</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\PR35-ASMD_Plugins\CommServerUAConfiguration\ServerConfiguration.csproj">
+      <Project>{28F30394-6EBA-4584-9041-F69CCB921424}</Project>
+      <Name>ServerConfiguration</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\PR46-UA.Common\Common\UA.Common.csproj">
+      <Project>{37afb65f-d781-4af3-b90e-1f26a7d2ba7a}</Project>
+      <Name>UA.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DataSourceExternal\DataSourceExternal.csproj">
+      <Project>{0868418e-f4b0-42d5-961a-e037c42132c9}</Project>
+      <Name>DataSourceExternal</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="DataBindingsManager.resx">
+      <DependentUpon>DataBindingsManager.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\licenses.licx" />
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
+  </Target>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

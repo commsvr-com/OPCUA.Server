@@ -1,0 +1,51 @@
+﻿<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ output extension=".cs" #>
+//<summary>
+//  Title   : Assembly info for: <#=m_AssemblyTitle#>
+//  System  : Microsoft Visual C# .NET
+//  $LastChangedDate:  $
+//  $Rev: $
+//  $LastChangedBy:  $
+//  $URL:  $
+//  $Id:  $
+//  History :
+//
+//  Copyright (C) 2013, CAS LODZ POLAND.
+//  TEL: +48 (42) 686 25 47
+//  mailto:techsupp@cas.eu
+//  http://www.cas.eu
+//</summary>
+
+using System.Reflection;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
+
+[assembly: AssemblyTitle("CAS.UA.Server.DataSourceExternal")]
+[assembly: AssemblyDescription("<#=CASUAServerProduct#>: <#=m_AssemblyTitle#> - consumes custom DS")]
+[assembly: AssemblyConfiguration("")]
+[assembly: AssemblyCompany("<#=AssemblyCompany#>")]
+[assembly: AssemblyProduct("<#=CASUAServerProduct#>")]
+[assembly: AssemblyCopyright("<#=AssemblyCopyright#>")]
+[assembly: AssemblyTrademark("<#=AssemblyTrademark#>")]
+[assembly: AssemblyCulture("")]
+
+[assembly: ComVisible(false)]
+// The following GUID is for the ID of the typelib if this project is exposed to COM
+[assembly: Guid("3134E60E-F6B0-4146-B307-6D4D3B79D418")]
+[assembly: AssemblyVersion("<#= CASUAServerVersion #>.*")]
+[assembly: AssemblyFileVersion("<#= CASUAServerVersion #>")]
+[assembly: CAS.Lib.CodeProtect.AssemblyKey( "3F7C7FB4-E01F-4B1F-A7AF-4CD5D87854EC" )]
+[assembly: CAS.Lib.CodeProtect.AssemblyHelper
+  (
+    Product = "<#=CASUAServerProduct#> <#=m_AssemblyTitle#>",
+    Company = "<#=AssemblyCompany#>",
+    Url = "www.cas.eu",
+    Email = "techsupp@cas.eu",
+    Phone = "+48(42)686 25 47"
+  )
+]
+
+<#@ include file = "..\..\..\PR39-CommonResources\T4Definitions\CAS.OPC.t4" #>
+<#+
+string m_AssemblyTitle = "CommServerUA: External DataSource";
+#>

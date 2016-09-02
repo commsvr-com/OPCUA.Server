@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UAModelDesignerSolution xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Name>Boiler Example Solution</Name>
+  <Projects>
+    <UAModelDesignerProject ProjectIdentifier="558f88a7-497f-4576-955c-a1b52a2bf312">
+      <Name>BoilerExample</Name>
+      <CSVFileName>$(ProjectFileName).csv</CSVFileName>
+      <BuildOutputDirectoryName>$(ProjectFileName)</BuildOutputDirectoryName>
+      <FileName>DemoConfiguration\BoilerExample.xml</FileName>
+    </UAModelDesignerProject>
+  </Projects>
+  <ServerDetails codebase="CAS.UA.Server.ServerConfiguration.dll" configuration="DemoConfiguration\BoilerExample.uasconfig" />
+</UAModelDesignerSolution>

@@ -1,0 +1,174 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{C7487848-938C-4878-8645-47D7AB4C2E7E}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ADI_on_cas_xptest_001</RootNamespace>
+    <AssemblyName>ADI on cas_xptest_001</AssemblyName>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="EmbeddedExample\ADISampleConfiguration\DefaultConfig.xml" />
+    <Content Include="EmbeddedExample\ADISampleConfiguration\FTNIRModel.xml" />
+    <Content Include="EmbeddedExample\ADISampleConfiguration\FTNIRModelInstance.xml" />
+    <Content Include="EmbeddedExample\ADISampleConfiguration\FTNIRModelInstance\FTNIRInstance.NodeSet.xml" />
+    <Content Include="EmbeddedExample\ADISampleConfiguration\FTNIRModelInstance\FTNIRInstance.NodeSet2.xml" />
+    <Content Include="EmbeddedExample\ADISampleConfiguration\FTNIRModelInstance\FTNIRInstance.PredefinedNodes.xml" />
+    <Content Include="EmbeddedExample\ADISampleConfiguration\FTNIRModel\FTNIR.NodeSet.xml" />
+    <Content Include="EmbeddedExample\ADISampleConfiguration\FTNIRModel\FTNIR.NodeSet2.xml" />
+    <Content Include="EmbeddedExample\ADISampleConfiguration\FTNIRModel\FTNIR.PredefinedNodes.xml" />
+    <Content Include="EmbeddedExample\ADISampleConfiguration\OpcUaAdiModel.xml" />
+    <Content Include="EmbeddedExample\ADISampleConfiguration\OpcUaAdiModel\Opc.Ua.Adi.NodeSet.xml" />
+    <Content Include="EmbeddedExample\ADISampleConfiguration\OpcUaAdiModel\Opc.Ua.Adi.NodeSet2.xml" />
+    <Content Include="EmbeddedExample\ADISampleConfiguration\OpcUaAdiModel\Opc.Ua.Adi.PredefinedNodes.xml" />
+    <Content Include="EmbeddedExample\ADISampleConfiguration\OpcUaDiModel.xml" />
+    <Content Include="EmbeddedExample\ADISampleConfiguration\OpcUaDiModel\Opc.Ua.Di.NodeSet.xml" />
+    <Content Include="EmbeddedExample\ADISampleConfiguration\OpcUaDiModel\Opc.Ua.Di.NodeSet2.xml" />
+    <Content Include="EmbeddedExample\ADISampleConfiguration\OpcUaDiModel\Opc.Ua.Di.PredefinedNodes.xml" />
+    <Content Include="EmbeddedExample\ADISampleConfiguration\OPC_DA_SampleAnalyser_tag_list.txt" />
+    <Content Include="EmbeddedExample\CAS.UA.Server.ServerConfiguration.dll" />
+    <Content Include="EmbeddedExample\DemoConfiguration\BoilerExample.xml" />
+    <Content Include="EmbeddedExample\DemoConfiguration\BoilerExample\CAS.UA.Server.Demo.NodeSet.xml" />
+    <Content Include="EmbeddedExample\DemoConfiguration\BoilerExample\CAS.UA.Server.Demo.NodeSet2.xml" />
+    <Content Include="EmbeddedExample\DemoConfiguration\BoilerExample\CAS.UA.Server.Demo.PredefinedNodes.xml" />
+    <Content Include="EmbeddedExample\DemoConfiguration\DefaultConfig.xml" />
+    <Content Include="ReadMe.html" />
+    <Content Include="Web.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="EmbeddedExample\ADISampleConfiguration\FTNIRModelInstance\FTNIRInstance.Classes.cs" />
+    <None Include="EmbeddedExample\ADISampleConfiguration\FTNIRModel\FTNIR.Classes.cs" />
+    <None Include="EmbeddedExample\ADISampleConfiguration\OpcUaAdiModel\Opc.Ua.Adi.Classes.cs" />
+    <None Include="EmbeddedExample\ADISampleConfiguration\OpcUaDiModel\Opc.Ua.Di.Classes.cs" />
+    <None Include="EmbeddedExample\DemoConfiguration\BoilerExample\CAS.UA.Server.Demo.Classes.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="CAS.CommServerUA.exe.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <None Include="EmbeddedExample\ADIExempleSolution.uamdsl" />
+    <Content Include="EmbeddedExample\ADISampleConfiguration\CAS.UAServer.DemoConfiguration.uasconfig" />
+    <Content Include="EmbeddedExample\ADISampleConfiguration\DemoConfiguration.oses" />
+    <Content Include="EmbeddedExample\ADISampleConfiguration\FTNIRModel.csv" />
+    <Content Include="EmbeddedExample\ADISampleConfiguration\FTNIRModelInstance.csv" />
+    <Content Include="EmbeddedExample\ADISampleConfiguration\FTNIRModelInstance\FTNIRInstance.PredefinedNodes.uanodes" />
+    <Content Include="EmbeddedExample\ADISampleConfiguration\FTNIRModelInstance\FTNIRInstance.Types.bsd" />
+    <None Include="EmbeddedExample\ADISampleConfiguration\FTNIRModelInstance\FTNIRInstance.Types.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <Content Include="EmbeddedExample\ADISampleConfiguration\FTNIRModel\FTNIR.PredefinedNodes.uanodes" />
+    <Content Include="EmbeddedExample\ADISampleConfiguration\FTNIRModel\FTNIR.Types.bsd" />
+    <None Include="EmbeddedExample\ADISampleConfiguration\FTNIRModel\FTNIR.Types.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <Content Include="EmbeddedExample\ADISampleConfiguration\OpcUaAdiModel.csv" />
+    <Content Include="EmbeddedExample\ADISampleConfiguration\OpcUaAdiModel\Opc.Ua.Adi.PredefinedNodes.uanodes" />
+    <Content Include="EmbeddedExample\ADISampleConfiguration\OpcUaAdiModel\Opc.Ua.Adi.Types.bsd" />
+    <None Include="EmbeddedExample\ADISampleConfiguration\OpcUaAdiModel\Opc.Ua.Adi.Types.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <Content Include="EmbeddedExample\ADISampleConfiguration\OpcUaDiModel.csv" />
+    <Content Include="EmbeddedExample\ADISampleConfiguration\OpcUaDiModel\Opc.Ua.Di.PredefinedNodes.uanodes" />
+    <Content Include="EmbeddedExample\ADISampleConfiguration\OpcUaDiModel\Opc.Ua.Di.Types.bsd" />
+    <None Include="EmbeddedExample\ADISampleConfiguration\OpcUaDiModel\Opc.Ua.Di.Types.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="EmbeddedExample\BoilerExampleSolution.uamdsl" />
+    <Content Include="EmbeddedExample\DemoConfiguration\BoilerExample.csv" />
+    <Content Include="EmbeddedExample\DemoConfiguration\BoilerExample.oses" />
+    <Content Include="EmbeddedExample\DemoConfiguration\BoilerExample.uasconfig" />
+    <Content Include="EmbeddedExample\DemoConfiguration\BoilerExample\CAS.UA.Server.Demo.PredefinedNodes.uanodes" />
+    <Content Include="EmbeddedExample\DemoConfiguration\BoilerExample\CAS.UA.Server.Demo.Types.bsd" />
+    <None Include="EmbeddedExample\DemoConfiguration\BoilerExample\CAS.UA.Server.Demo.Types.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+    <None Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>52006</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:52006/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
