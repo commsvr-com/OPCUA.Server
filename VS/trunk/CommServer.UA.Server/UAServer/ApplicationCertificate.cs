@@ -25,17 +25,22 @@ namespace CAS.UA.Server
   /// Class ApplicationCertificate - helper class providing application instance certificate management functionality
   /// </summary>
   /// <remarks>
-  /// This class was copied from Opc.Ua.Client.Controls.GuiUtils
+  /// This class contains selected methods copied from Opc.Ua.Client.Controls.GuiUtils
   /// </remarks>
   internal static class ApplicationCertificate
   {
     /// <summary>
     /// Creates an application instance certificate if one does not already exist.
     /// </summary>
+    /// <param name="configuration">The configuration.</param>
+    /// <param name="keySize">Size of the key.</param>
+    /// <param name="dialogResult">The dialog result returning user decision obtained from MessageBox. Parameters: message, caption.</param>
+    /// <param name="updateFile">if set to <c>true</c> [update file].</param>
+    /// <returns>X509Certificate2.</returns>
     public static X509Certificate2 CheckApplicationInstanceCertificate(
         ApplicationConfiguration configuration,
         ushort keySize,
-        bool interactive,
+        Func<string, string, bool> dialogResult,
         bool updateFile)
     {
       // create a default certificate id none specified.
@@ -74,12 +79,9 @@ namespace CAS.UA.Server
                 "Matching certificate with SubjectName={0} found but with a different thumbprint. Use certificate?",
                 id.SubjectName);
 
-            if (interactive)
+            if (dialogResult(message, configuration.ApplicationName))
             {
-              if (MessageBox.Show(message, configuration.ApplicationName, MessageBoxButtons.YesNo) == DialogResult.No)
-              {
-                certificate = null;
-              }
+              certificate = null;
             }
           }
         }
@@ -96,12 +98,9 @@ namespace CAS.UA.Server
               "Matching certificate with SubjectName={0} found but without a private key. Create a new certificate?",
               id.SubjectName);
 
-          if (interactive)
+          if (dialogResult(message, configuration.ApplicationName))
           {
-            if (MessageBox.Show(message, configuration.ApplicationName, MessageBoxButtons.YesNo) == DialogResult.No)
-            {
-              certificate = null;
-            }
+            certificate = null;
           }
         }
       }
@@ -169,13 +168,10 @@ namespace CAS.UA.Server
 
           createNewCertificate = true;
 
-          if (interactive)
+          if (!dialogResult(message, configuration.ApplicationName))
           {
-            if (MessageBox.Show(message, configuration.ApplicationName, MessageBoxButtons.YesNo) != DialogResult.Yes)
-            {
-              createNewCertificate = false;
-              continue;
-            }
+            createNewCertificate = false;
+            continue;
           }
 
           Utils.Trace(message);
@@ -194,14 +190,11 @@ namespace CAS.UA.Server
       }
 
       // prompt user.
-      if (interactive)
+      if (!createNewCertificate)
       {
-        if (!createNewCertificate)
+        if (!dialogResult("Application does not have an instance certificate. Create one automatically?", configuration.ApplicationName))
         {
-          if (MessageBox.Show("Application does not have an instance certificate. Create one automatically?", configuration.ApplicationName, MessageBoxButtons.YesNo) == DialogResult.No)
-          {
-            return null;
-          }
+          return null;
         }
       }
 
@@ -278,27 +271,59 @@ namespace CAS.UA.Server
     }
 
     /// <summary>
-    /// Handles a certificate validation error.
+    /// The extension method handles a certificate validation error and produces message to be displayed.
     /// </summary>
-    /// <param name="caller">The caller's text is used as the caption of the <see cref="MessageBox"/> shown to provide details about the error.</param>
-    /// <param name="validator">The validator (not used).</param>
-    /// <param name="e">The <see cref="Opc.Ua.CertificateValidationEventArgs"/> instance event arguments provided when a certificate validation error occurs.</param>
-    public static void HandleCertificateValidationError(Form caller, CertificateValidator validator, CertificateValidationEventArgs e)
+    public static string HandleCertificateValidationError(this CertificateValidationEventArgs e)
     {
       StringBuilder buffer = new StringBuilder();
-
-      buffer.AppendFormat("Certificate could not validated: {0}\r\n\r\n", e.Error.StatusCode);
+      buffer.AppendFormat("Certificate could not be validated: {0}\r\n\r\n", e.Error.StatusCode);
       buffer.AppendFormat("Subject: {0}\r\n", e.Certificate.Subject);
       buffer.AppendFormat("Issuer: {0}\r\n", (e.Certificate.Subject == e.Certificate.Issuer) ? "Self-signed" : e.Certificate.Issuer);
       buffer.AppendFormat("Valid From: {0}\r\n", e.Certificate.NotBefore);
       buffer.AppendFormat("Valid To: {0}\r\n", e.Certificate.NotAfter);
       buffer.AppendFormat("Thumbprint: {0}\r\n\r\n", e.Certificate.Thumbprint);
-
       buffer.AppendFormat("Accept anyways?");
+      return buffer.ToString();
+    }
+    /// <summary>
+    /// Displays the UA-TCP configuration in the form.
+    /// </summary>
+    /// <param name="form">The form to display the UA-TCP configuration.</param>
+    /// <param name="configuration">The configuration instance that stores the configurable information for a UA application.</param>
+    public static void DisplayUaTcpImplementation(Form form, ApplicationConfiguration configuration)
+    {
+      // check if UA TCP configuration included.
+      TransportConfiguration transport = null;
 
-      if (MessageBox.Show(buffer.ToString(), caller.Text, MessageBoxButtons.YesNo) == DialogResult.Yes)
+      for (int ii = 0; ii < configuration.TransportConfigurations.Count; ii++)
       {
-        e.Accept = true;
+        if (configuration.TransportConfigurations[ii].UriScheme == Utils.UriSchemeOpcTcp)
+        {
+          transport = configuration.TransportConfigurations[ii];
+          break;
+        }
+      }
+
+      // check if UA TCP implementation explicitly specified.
+      if (transport != null)
+      {
+        string text = form.Text;
+
+        int index = text.LastIndexOf("(UA TCP - ");
+
+        if (index >= 0)
+        {
+          text = text.Substring(0, index);
+        }
+
+        if (transport.TypeName == Utils.UaTcpBindingNativeStack)
+        {
+          form.Text = Utils.Format("{0} (UA TCP - ANSI C)", text);
+        }
+        else
+        {
+          form.Text = Utils.Format("{0} (UA TCP - C#)", text);
+        }
       }
     }
 
@@ -307,7 +332,7 @@ namespace CAS.UA.Server
     /// </summary>
     /// <param name="configuration">The application's configuration which specifies the location of the TrustedPeerStore.</param>
     /// <param name="certificate">The certificate to register.</param>
-    public static void AddToTrustedPeerStore(ApplicationConfiguration configuration, X509Certificate2 certificate)
+    private static void AddToTrustedPeerStore(ApplicationConfiguration configuration, X509Certificate2 certificate)
     {
       ICertificateStore store = configuration.SecurityConfiguration.TrustedPeerCertificates.OpenStore();
 
@@ -353,7 +378,7 @@ namespace CAS.UA.Server
     /// Deletes an existing application instance certificate.
     /// </summary>
     /// <param name="configuration">The configuration instance that stores the configurable information for a UA application.</param>
-    public static void DeleteApplicationInstanceCertificate(ApplicationConfiguration configuration)
+    private static void DeleteApplicationInstanceCertificate(ApplicationConfiguration configuration)
     {
       // create a default certificate id none specified.
       CertificateIdentifier id = configuration.SecurityConfiguration.ApplicationCertificate;
