@@ -1,4 +1,8 @@
-﻿using System;
+﻿using CAS.Lib.CodeProtect;
+using CAS.UA.Server.ServerConfiguration;
+using Opc.Ua;
+using Opc.Ua.Configuration;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -12,10 +16,6 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows.Forms;
 using System.Xml;
-using CAS.Lib.CodeProtect;
-using CAS.UA.Server.ServerConfiguration;
-using Opc.Ua;
-using Opc.Ua.Configuration;
 
 namespace CAS.UA.Server
 {
@@ -1807,5 +1807,6 @@ namespace CAS.UA.Server
     private ServerBase m_server;
     private ApplicationConfiguration m_applicationConfiguration;
     #endregion
+
   }
 }

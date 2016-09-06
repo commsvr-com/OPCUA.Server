@@ -1,46 +1,42 @@
-﻿//<summary>
-//  Title   : Extrernal Data Source Consument Component
-//  System  : Microsoft Visual C# .NET 2012
-//  $LastChangedDate:$
-//  $Rev:$
-//  $LastChangedBy:$
-//  $URL:$
-//  $Id:$
+﻿//_______________________________________________________________
+//  Title   : External Data Source Consumed Component
+//  System  : Microsoft VisualStudio 2015 / C#
+//  $LastChangedDate:  $
+//  $Rev: $
+//  $LastChangedBy: $
+//  $URL: $
+//  $Id:  $
 //
-//  Copyright (C) 2013, CAS LODZ POLAND.
+//  Copyright (C) 2016, CAS LODZ POLAND.
 //  TEL: +48 (42) 686 25 47
 //  mailto://techsupp@cas.eu
 //  http://www.cas.eu
-//</summary>
-using System;
-using System.Collections.Generic;
+//_______________________________________________________________
+
 using System.ComponentModel;
-using System.Diagnostics;
-using System.Text;
 
 namespace CAS.UA.Server.DataSource.External
 {
+
   /// <summary>
-  /// Extrernal Data Source Consument Component
+  /// External Data Source Consumed Component
   /// </summary>
-  public partial class ExtrernalDataSourceComponent: Component
+  public partial class ExternalDataSourceComponent: Component
   {
     /// <summary>
-    /// Initializes a new instance of the <see cref="ExtrernalDataSourceComponent"/> class.
+    /// Initializes a new instance of the <see cref="ExternalDataSourceComponent" /> class.
     /// </summary>
-    public ExtrernalDataSourceComponent()
+    public ExternalDataSourceComponent()
     {
       InitializeComponent();
     }
-
     /// <summary>
-    /// Initializes a new instance of the <see cref="ExtrernalDataSourceComponent"/> class.
+    /// Initializes a new instance of the <see cref="ExternalDataSourceComponent" /> class.
     /// </summary>
     /// <param name="container">The container.</param>
-    public ExtrernalDataSourceComponent( IContainer container )
+    public ExternalDataSourceComponent( IContainer container )
     {
       container.Add( this );
-
       InitializeComponent();
     }
     /// <summary>
@@ -50,5 +46,6 @@ namespace CAS.UA.Server.DataSource.External
     {
       //TODO TBD;
     }
+
   }
 }

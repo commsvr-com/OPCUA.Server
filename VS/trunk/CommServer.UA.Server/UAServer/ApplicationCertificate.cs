@@ -288,9 +288,10 @@ namespace CAS.UA.Server
     /// <summary>
     /// Displays the UA-TCP configuration in the form.
     /// </summary>
-    /// <param name="form">The form to display the UA-TCP configuration.</param>
+    /// <param name="assign">The assign.</param>
+    /// <param name="formText">The form text.</param>
     /// <param name="configuration">The configuration instance that stores the configurable information for a UA application.</param>
-    public static void DisplayUaTcpImplementation(Form form, ApplicationConfiguration configuration)
+    public static void DisplayUaTcpImplementation(Action<string> assign, string formText, ApplicationConfiguration configuration)
     {
       // check if UA TCP configuration included.
       TransportConfiguration transport = null;
@@ -307,7 +308,7 @@ namespace CAS.UA.Server
       // check if UA TCP implementation explicitly specified.
       if (transport != null)
       {
-        string text = form.Text;
+        string text = formText;
 
         int index = text.LastIndexOf("(UA TCP - ");
 
@@ -318,11 +319,11 @@ namespace CAS.UA.Server
 
         if (transport.TypeName == Utils.UaTcpBindingNativeStack)
         {
-          form.Text = Utils.Format("{0} (UA TCP - ANSI C)", text);
+          assign( Utils.Format("{0} (UA TCP - ANSI C)", text));
         }
         else
         {
-          form.Text = Utils.Format("{0} (UA TCP - C#)", text);
+          assign(Utils.Format("{0} (UA TCP - C#)", text));
         }
       }
     }
