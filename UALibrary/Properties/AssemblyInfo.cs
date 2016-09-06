@@ -1,17 +1,18 @@
-﻿//_______________________________________________________________
+﻿
+//<summary>
 //  Title   : Assembly info for: CommServerUA: OPCF SDK Library Interface
-//  System  : Microsoft VisualStudio 2013 / C#
+//  System  : Microsoft Visual C# .NET
 //  $LastChangedDate$
 //  $Rev$
 //  $LastChangedBy$
 //  $URL$
 //  $Id$
 //
-//  Copyright (C) 2015, CAS LODZ POLAND.
-//  TEL: +48 (42) 686 25 47
-//  mailto://techsupp@cas.eu
-//  http://www.cas.eu
-//_______________________________________________________________
+//  Copyright (c) 2000-2016 CAS LODZ POLAND
+//  +48 (42) 686 25 47
+//  techsupp@cas.eu
+//  www.cas.eu
+//</summary>
 
 using System.Reflection;
 using System.Runtime.CompilerServices;
@@ -22,7 +23,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("CAS")]
 [assembly: AssemblyProduct("CAS CommServerUA Family")]
-[assembly: AssemblyCopyright("Copyright (c) 2000-2015 CAS LODZ POLAND")]
+[assembly: AssemblyCopyright("Copyright (c) 2000-2016 CAS LODZ POLAND")]
 [assembly: AssemblyTrademark("CommServer")]
 [assembly: AssemblyCulture("")]
 

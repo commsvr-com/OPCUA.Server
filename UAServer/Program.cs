@@ -13,13 +13,13 @@
 //  http://www.cas.eu
 //</summary>
 
+using CAS.CommServer.UA.Common;
+using CAS.Lib.CodeProtect;
 using CAS.Lib.RTLib.Utils;
-using CAS.UA.SDK.ServerConfigurationBase;
 using CAS.UA.Server.Library;
 using CAS.UA.Server.Properties;
 using CAS.UA.Server.UserInterface;
 using Opc.Ua;
-using Opc.Ua.Client.Controls;
 using System;
 using System.IO;
 using System.Reflection;
@@ -52,7 +52,6 @@ namespace CAS.UA.Server
     [STAThread]
     static void Main()
     {
-
       string m_cmmdLine = Environment.CommandLine;
       Application.EnableVisualStyles();
       Application.SetCompatibleTextRenderingDefault( false );
@@ -65,8 +64,7 @@ namespace CAS.UA.Server
         CASApplicationInstance.UnInstallServer( Assembly.GetExecutingAssembly().Location );
       }
       CASApplicationInstance application = new CASApplicationInstance();
-      CAS.UA.Server.ServerConfiguration.Main config = new CAS.UA.Server.ServerConfiguration.Main();
-
+      ServerConfiguration.Main config = new ServerConfiguration.Main();
       try
       {
         if ( !Environment.UserInteractive )
@@ -90,11 +88,11 @@ namespace CAS.UA.Server
       {
         try
         {
-          CAS.Lib.CodeProtect.LibInstaller.InstalLicense( true );
+          LibInstaller.InstalLicense( true );
         }
         catch ( Exception ex )
         {
-          MessageBox.Show( "License instalation has failed, reason: " + ex.Message );
+          MessageBox.Show( "License installation has failed, reason: " + ex.Message );
         }
       }
       UAServer server = new UAServer();
@@ -105,19 +103,26 @@ namespace CAS.UA.Server
         if ( config.Configuration == null )
           throw new ArgumentNullException( "Cannot read configuration" );
         BaseDirectoryHelper.Instance.SetBaseDirectoryProvider( new BaseDirectoryProvider( configFI.DirectoryName ) );
-        GuiUtils.CheckApplicationInstanceCertificate( config.Configuration, 1024, true, true );
-        GuiUtils.OverrideUaTcpImplementation( config.Configuration );
+        ApplicationCertificate.CheckApplicationInstanceCertificate( config.Configuration, 1024, (x,y) => true, true ); //TODO add logging function or user interface.
+        ApplicationCertificate.OverrideUaTcpImplementation( config.Configuration );
         server.Start( config.Configuration );
         Application.Run( new ServerForm( server, config.Configuration, application ) );
       }
       catch ( Exception e )
       {
-        GuiUtils.HandleException( "UA Server", null, e );
+        HandleException( "UA Server", e );
       }
       finally
       {
         server.Stop();
       }
+    }
+    /// <summary>
+    /// Logs the details of an exception.
+    /// </summary>
+    public static void HandleException(string caption, Exception e)
+    {
+      //TODO new ExceptionDlg().ShowDialog(caption, e);
     }
   }
 }

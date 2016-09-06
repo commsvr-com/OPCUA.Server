@@ -1,6 +1,6 @@
 ﻿namespace CAS.UA.Server.DataSource.External
 {
-  partial class ExtrernalDataSourceComponent
+  partial class ExternalDataSourceComponent
   {
     /// <summary>
     /// Required designer variable.

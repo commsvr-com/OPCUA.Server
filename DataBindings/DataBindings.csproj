@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>CAS.UA.Server.DataBindings</RootNamespace>
     <AssemblyName>CAS.UA.Server.DataBindings</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>cas.snk</AssemblyOriginatorKeyFile>
@@ -46,6 +46,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -54,33 +55,88 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CAS.CodeProtect">
-      <HintPath>..\..\CommonBinaries\PR36-CAS_MAIN_CORE_PCKG\50000\CAS.CodeProtect.dll</HintPath>
+    <Reference Include="CAS.CodeProtect, Version=5.0.2.39087, Culture=neutral, PublicKeyToken=8832ff1a67ea61a3, processorArchitecture=MSIL">
+      <HintPath>..\packages\CAS.CodeProtect.5.0.2\lib\net35\CAS.CodeProtect.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="CAS.CommonBus">
-      <HintPath>..\..\CommonBinaries\PR37-CAS_LIB_PCKG\50000\CAS.CommonBus.dll</HintPath>
+    <Reference Include="CAS.CommServer.CommonBus, Version=5.1.2.24438, Culture=neutral, PublicKeyToken=8832ff1a67ea61a3, processorArchitecture=MSIL">
+      <HintPath>..\packages\CAS.CommServer.CommonBus.5.01.02-Charlie\lib\net451\CAS.CommServer.CommonBus.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="CAS.DeviceSimulator">
-      <HintPath>..\..\CommonBinaries\PR37-CAS_LIB_PCKG\50000\CAS.DeviceSimulator.dll</HintPath>
+    <Reference Include="CAS.CommServer.DA.Client.Operations, Version=2.0.14.18767, Culture=neutral, PublicKeyToken=8832ff1a67ea61a3, processorArchitecture=MSIL">
+      <HintPath>..\packages\CAS.CommServer.DA.Client.2.00.14-Echo\lib\net451\CAS.CommServer.DA.Client.Operations.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="CAS.OpcNetApi.350">
-      <HintPath>..\..\CommonBinaries\EX01-OPCFoundation_NETApi\CAS.OpcNetApi.350.dll</HintPath>
+    <Reference Include="CAS.CommServer.DA.Client.Services, Version=2.0.14.18765, Culture=neutral, PublicKeyToken=8832ff1a67ea61a3, processorArchitecture=MSIL">
+      <HintPath>..\packages\CAS.CommServer.DA.Client.2.00.14-Echo\lib\net451\CAS.CommServer.DA.Client.Services.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="CAS.RTLib">
-      <HintPath>..\..\CommonBinaries\PR36-CAS_MAIN_CORE_PCKG\50000\CAS.RTLib.dll</HintPath>
+    <Reference Include="CAS.CommServer.DA.ItemDescriber, Version=1.0.2.32540, Culture=neutral, PublicKeyToken=8832ff1a67ea61a3, processorArchitecture=MSIL">
+      <HintPath>..\packages\CAS.CommServer.DA.ItemDescriber.1.00.2-Delta\lib\net451\CAS.CommServer.DA.ItemDescriber.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="CAS.RTLibComm">
-      <HintPath>..\..\CommonBinaries\PR36-CAS_MAIN_CORE_PCKG\50000\CAS.RTLibComm.dll</HintPath>
+    <Reference Include="CAS.CommServer.DA.Server.Configuration, Version=4.1.2.24782, Culture=neutral, PublicKeyToken=8832ff1a67ea61a3, processorArchitecture=MSIL">
+      <HintPath>..\packages\CAS.CommServer.DA.Server.Configuration.4.1.2-Alpha\lib\net35\CAS.CommServer.DA.Server.Configuration.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="CAS.CommServer.DAClientConfiguration, Version=5.1.2.37849, Culture=neutral, PublicKeyToken=8832ff1a67ea61a3, processorArchitecture=MSIL">
+      <HintPath>..\packages\CAS.CommServer.DAClientConfiguration.5.01.02-Charlie\lib\net451\CAS.CommServer.DAClientConfiguration.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="CAS.CommServer.DeviceSimulator, Version=5.1.2.23357, Culture=neutral, PublicKeyToken=8832ff1a67ea61a3, processorArchitecture=MSIL">
+      <HintPath>..\packages\CAS.CommServer.DeviceSimulator.5.01.02-Alpha\lib\net451\CAS.CommServer.DeviceSimulator.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="CAS.CommServer.OPCClassic.SDK.COMWrapper, Version=2.1.106.23280, Culture=neutral, PublicKeyToken=8832ff1a67ea61a3, processorArchitecture=MSIL">
+      <HintPath>..\packages\CAS.CommServer.OPCClassic.SDK.COMWrapper.2.01.106\lib\net451\CAS.CommServer.OPCClassic.SDK.COMWrapper.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="CAS.CommServer.OPCClassic.SDK.Core, Version=2.1.106.25891, Culture=neutral, PublicKeyToken=8832ff1a67ea61a3, processorArchitecture=MSIL">
+      <HintPath>..\packages\CAS.CommServer.OPCClassic.SDK.Core.2.01.106\lib\net451\CAS.CommServer.OPCClassic.SDK.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="CAS.CommServer.ProtocolHub.Communication, Version=4.0.22.40620, Culture=neutral, PublicKeyToken=8832ff1a67ea61a3, processorArchitecture=MSIL">
+      <HintPath>..\packages\CAS.CommServer.ProtocolHub.Communication.4.00.22-Alpha\lib\net451\CAS.CommServer.ProtocolHub.Communication.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="CAS.CommServer.ProtocolHub.MonitorInterface, Version=4.0.22.40620, Culture=neutral, PublicKeyToken=8832ff1a67ea61a3, processorArchitecture=MSIL">
+      <HintPath>..\packages\CAS.CommServer.ProtocolHub.Communication.4.00.22-Alpha\lib\net451\CAS.CommServer.ProtocolHub.MonitorInterface.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="CAS.CommServer.UA.Common, Version=3.0.2.39664, Culture=neutral, PublicKeyToken=8832ff1a67ea61a3, processorArchitecture=MSIL">
+      <HintPath>..\packages\CAS.UA.Common.3.00.02-Charlie\lib\net461\CAS.CommServer.UA.Common.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="CAS.CommServer.UA.ConfigurationEditor.ServerConfiguration, Version=3.20.1.38409, Culture=neutral, PublicKeyToken=8832ff1a67ea61a3, processorArchitecture=MSIL">
+      <HintPath>..\packages\CAS.CommServer.UA.ConfigurationEditor.ServerConfiguration.3.20.1-Hotel\lib\net461\CAS.CommServer.UA.ConfigurationEditor.ServerConfiguration.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="CAS.RTLib, Version=5.0.2.39089, Culture=neutral, PublicKeyToken=8832ff1a67ea61a3, processorArchitecture=MSIL">
+      <HintPath>..\packages\CAS.RealTime.5.0.2\lib\net35\CAS.RTLib.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="CAS.RTLibComm, Version=5.0.2.39088, Culture=neutral, PublicKeyToken=8832ff1a67ea61a3, processorArchitecture=MSIL">
+      <HintPath>..\packages\CAS.RealTime.5.0.2\lib\net35\CAS.RTLibComm.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="CAS.UA.IServerConfiguration, Version=1.0.0.32204, Culture=neutral, PublicKeyToken=8832ff1a67ea61a3, processorArchitecture=MSIL">
       <HintPath>..\packages\CAS.UA.IServerConfiguration.1.00.00\lib\net35\CAS.UA.IServerConfiguration.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Opc.Ua.Core, Version=1.0.240.1, Culture=neutral, PublicKeyToken=22186a540fc0b044, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\CommonBinaries\OPCFSDK.Binaries\Opc.Ua.Core.dll</HintPath>
+    <Reference Include="CAS.Windows.Forms, Version=5.0.6.33053, Culture=neutral, PublicKeyToken=8832ff1a67ea61a3, processorArchitecture=MSIL">
+      <HintPath>..\packages\CAS.Windows.Forms.5.0.6-Charlie\lib\net451\CAS.Windows.Forms.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Opc.Ua.Core, Version=1.1.326.0, Culture=neutral, PublicKeyToken=78aea80f6827b5ab, processorArchitecture=MSIL">
+      <HintPath>..\packages\OPC.UA.SDK.Core.1.01.326\lib\net35\Opc.Ua.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="OpcComRcw, Version=2.0.106.0, Culture=neutral, PublicKeyToken=78aea80f6827b5ab, processorArchitecture=MSIL">
+      <HintPath>..\packages\CAS.CommServer.OPCClassic.SDK.COMWrapper.2.01.106\lib\net451\OpcComRcw.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -122,6 +178,7 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="cas.snk" />
+    <None Include="DemoConfiguration.oses" />
     <None Include="Help\ASModelDesigner.chm" />
     <None Include="packages.config" />
     <None Include="Properties\AssemblyInfo.tt">
@@ -134,34 +191,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\PR21-CommServer\CommServerConsoleInterface\CR.CommServerConsoleInterface.csproj">
-      <Project>{CE7BA276-5ACF-44FE-B24A-F91F6A0B0436}</Project>
-      <Name>CR.CommServerConsoleInterface</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\PR21-CommServer\CommServer\CR.CommServer.csproj">
-      <Project>{E1351D09-7241-44C3-A292-8D46E322A61D}</Project>
-      <Name>CR.CommServer</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\PR24-Biblioteka\DataPorterConfigLib\DataPorterConfigLib.csproj">
-      <Project>{6A9D0309-3FCA-4A32-917D-68BD883B3F37}</Project>
-      <Name>DataPorterConfigLib</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\PR24-Biblioteka\NetworkConfigLib\BK.NetworkConfigLib.csproj">
-      <Project>{531FA61A-6106-442D-9380-B4991DCECF19}</Project>
-      <Name>BK.NetworkConfigLib</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\PR24-Biblioteka\OPCClient.Da\BK.OPCClient.Da.csproj">
-      <Project>{4B443668-AE54-4D84-A840-CD5973296D27}</Project>
-      <Name>BK.OPCClient.Da</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\PR35-ASMD_Plugins\CommServerUAConfiguration\ServerConfiguration.csproj">
-      <Project>{28F30394-6EBA-4584-9041-F69CCB921424}</Project>
-      <Name>ServerConfiguration</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\PR46-UA.Common\Common\UA.Common.csproj">
-      <Project>{37afb65f-d781-4af3-b90e-1f26a7d2ba7a}</Project>
-      <Name>UA.Common</Name>
-    </ProjectReference>
     <ProjectReference Include="..\DataSourceExternal\DataSourceExternal.csproj">
       <Project>{0868418e-f4b0-42d5-961a-e037c42132c9}</Project>
       <Name>DataSourceExternal</Name>
@@ -171,7 +200,6 @@
     <EmbeddedResource Include="DataBindingsManager.resx">
       <DependentUpon>DataBindingsManager.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Properties\licenses.licx" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

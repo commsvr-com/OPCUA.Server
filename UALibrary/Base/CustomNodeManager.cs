@@ -25,13 +25,13 @@ namespace CAS.UA.Server.Library.Base
   /// <summary>
   /// A node manager for a variety of test data.
   /// </summary>
-  public class CustomNodeManager2: INodeManager, INodeIdFactory, IDisposable
+  public class CustomNodeManager2 : INodeManager, INodeIdFactory, IDisposable
   {
     #region Constructors
     /// <summary>
     /// Initializes the node manager.
     /// </summary>
-    public CustomNodeManager2( IServerInternal server )
+    public CustomNodeManager2(IServerInternal server)
     {
       // save a reference to the server that owns the node manager.
       m_server = server;
@@ -56,7 +56,7 @@ namespace CAS.UA.Server.Library.Base
     /// </summary>
     ~CustomNodeManager2()
     {
-      Dispose( false );
+      Dispose(false);
     }
 
     /// <summary>
@@ -64,25 +64,25 @@ namespace CAS.UA.Server.Library.Base
     /// </summary>
     public void Dispose()
     {
-      Dispose( true );
-      GC.SuppressFinalize( this );
+      Dispose(true);
+      GC.SuppressFinalize(this);
     }
 
     /// <summary>
     /// An overrideable version of the Dispose.
     /// </summary>
-    protected virtual void Dispose( bool disposing )
+    protected virtual void Dispose(bool disposing)
     {
-      if ( disposing )
+      if (disposing)
       {
-        lock ( m_lock )
+        lock (m_lock)
         {
-          Utils.SilentDispose( m_samplingTimer );
+          Utils.SilentDispose(m_samplingTimer);
           m_samplingTimer = null;
 
-          foreach ( NodeState node in m_predefinedNodes.Values )
+          foreach (NodeState node in m_predefinedNodes.Values)
           {
-            Utils.SilentDispose( node );
+            Utils.SilentDispose(node);
           }
         }
       }
@@ -96,7 +96,7 @@ namespace CAS.UA.Server.Library.Base
     /// <param name="context">The context.</param>
     /// <param name="node">The node.</param>
     /// <returns>The new NodeId.</returns>
-    public virtual NodeId New( ISystemContext context, NodeState node )
+    public virtual NodeId New(ISystemContext context, NodeState node)
     {
       return node.NodeId;
     }
@@ -150,17 +150,17 @@ namespace CAS.UA.Server.Library.Base
     /// </summary>
     /// <param name="nodeId">The node id to check.</param>
     /// <returns>True if the namespace is one of the nodes.</returns>
-    protected virtual bool IsNodeIdInNamespace( NodeId nodeId )
+    protected virtual bool IsNodeIdInNamespace(NodeId nodeId)
     {
-      if ( NodeId.IsNull( nodeId ) )
+      if (NodeId.IsNull(nodeId))
       {
         return false;
       }
 
       // quickly exclude nodes that not in the namespace.
-      for ( int ii = 0; ii < m_namespaceIndexes.Length; ii++ )
+      for (int ii = 0; ii < m_namespaceIndexes.Length; ii++)
       {
-        if ( nodeId.NamespaceIndex == m_namespaceIndexes[ ii ] )
+        if (nodeId.NamespaceIndex == m_namespaceIndexes[ii])
         {
           return true;
         }
@@ -174,16 +174,16 @@ namespace CAS.UA.Server.Library.Base
     /// </summary>
     /// <param name="managerHandle">The handle to check.</param>
     /// <returns>Non-null if the handle belongs to the node manager.</returns>
-    protected virtual NodeState IsHandleInNamespace( object managerHandle )
+    protected virtual NodeState IsHandleInNamespace(object managerHandle)
     {
       NodeState source = managerHandle as NodeState;
 
-      if ( source == null )
+      if (source == null)
       {
         return null;
       }
 
-      if ( !IsNodeIdInNamespace( source.NodeId ) )
+      if (!IsNodeIdInNamespace(source.NodeId))
       {
         return null;
       }
@@ -194,13 +194,13 @@ namespace CAS.UA.Server.Library.Base
     /// <summary>
     /// Returns the state object for the specified node if it exists.
     /// </summary>
-    public NodeState Find( NodeId nodeId )
+    public NodeState Find(NodeId nodeId)
     {
-      lock ( Lock )
+      lock (Lock)
       {
         NodeState node = null;
 
-        if ( !PredefinedNodes.TryGetValue( nodeId, out node ) )
+        if (!PredefinedNodes.TryGetValue(nodeId, out node))
         {
           return null;
         }
@@ -223,31 +223,31 @@ namespace CAS.UA.Server.Library.Base
         NodeId parentId,
         NodeId referenceTypeId,
         QualifiedName browseName,
-        BaseInstanceState instance )
+        BaseInstanceState instance)
     {
-      ServerSystemContext contextToUse = (ServerSystemContext)m_systemContext.Copy( context );
+      ServerSystemContext contextToUse = (ServerSystemContext)m_systemContext.Copy(context);
 
-      lock ( Lock )
+      lock (Lock)
       {
         instance.ReferenceTypeId = referenceTypeId;
 
         NodeState parent = null;
 
-        if ( parentId != null )
+        if (parentId != null)
         {
-          if ( !PredefinedNodes.TryGetValue( parentId, out parent ) )
+          if (!PredefinedNodes.TryGetValue(parentId, out parent))
           {
             throw ServiceResultException.Create(
                 StatusCodes.BadNodeIdUnknown,
                 "Cannot find parent with id: {0}",
-                parentId );
+                parentId);
           }
 
-          parent.AddChild( instance );
+          parent.AddChild(instance);
         }
 
-        instance.Create( contextToUse, null, browseName, null, true );
-        AddPredefinedNode( contextToUse, instance );
+        instance.Create(contextToUse, null, browseName, null, true);
+        AddPredefinedNode(contextToUse, instance);
 
         return instance.NodeId;
       }
@@ -258,30 +258,30 @@ namespace CAS.UA.Server.Library.Base
     /// </summary>
     public bool DeleteNode(
         ServerSystemContext context,
-        NodeId nodeId )
+        NodeId nodeId)
     {
-      ServerSystemContext contextToUse = m_systemContext.Copy( context );
+      ServerSystemContext contextToUse = m_systemContext.Copy(context);
 
       bool found = false;
       List<LocalReference> referencesToRemove = new List<LocalReference>();
 
-      lock ( Lock )
+      lock (Lock)
       {
         NodeState node = null;
 
-        if ( PredefinedNodes.TryGetValue( nodeId, out node ) )
+        if (PredefinedNodes.TryGetValue(nodeId, out node))
         {
-          RemovePredefinedNode( contextToUse, node, referencesToRemove );
+          RemovePredefinedNode(contextToUse, node, referencesToRemove);
           found = true;
         }
 
-        RemoveRootNotifier( node );
+        RemoveRootNotifier(node);
       }
 
       // must release the lock before removing cross references to other node managers.
-      if ( referencesToRemove.Count > 0 )
+      if (referencesToRemove.Count > 0)
       {
-        Server.NodeManager.RemoveReferences( referencesToRemove );
+        Server.NodeManager.RemoveReferences(referencesToRemove);
       }
 
       return found;
@@ -305,16 +305,16 @@ namespace CAS.UA.Server.Library.Base
 
       protected set
       {
-        if ( value != null )
+        if (value != null)
         {
-          m_namespaceUris = new List<string>( value );
+          m_namespaceUris = new List<string>(value);
         }
         else
         {
           m_namespaceUris = new List<string>();
         }
 
-        m_namespaceIndexes = new ushort[ m_namespaceUris.Count ];
+        m_namespaceIndexes = new ushort[m_namespaceUris.Count];
       }
     }
 
@@ -326,17 +326,17 @@ namespace CAS.UA.Server.Library.Base
     /// in other node managers. For example, the 'Objects' node is managed by the CoreNodeManager and
     /// should have a reference to the root folder node(s) exposed by this node manager.  
     /// </remarks>
-    public virtual void CreateAddressSpace( IDictionary<NodeId, IList<IReference>> externalReferences )
+    public virtual void CreateAddressSpace(IDictionary<NodeId, IList<IReference>> externalReferences)
     {
-      lock ( Lock )
+      lock (Lock)
       {
         // add the uris to the server's namespace table and cache the indexes.
-        for ( int ii = 0; ii < m_namespaceUris.Count; ii++ )
+        for (int ii = 0; ii < m_namespaceUris.Count; ii++)
         {
-          m_namespaceIndexes[ ii ] = m_server.NamespaceUris.GetIndexOrAppend( m_namespaceUris[ ii ] );
+          m_namespaceIndexes[ii] = m_server.NamespaceUris.GetIndexOrAppend(m_namespaceUris[ii]);
         }
 
-        LoadPredefinedNodes( m_systemContext, externalReferences );
+        LoadPredefinedNodes(m_systemContext, externalReferences);
       }
     }
 
@@ -348,26 +348,26 @@ namespace CAS.UA.Server.Library.Base
         ISystemContext context,
         Assembly assembly,
         string resourcePath,
-        IDictionary<NodeId, IList<IReference>> externalReferences )
+        IDictionary<NodeId, IList<IReference>> externalReferences)
     {
       // load the predefined nodes from an XML document.
       NodeStateCollection predefinedNodes = new NodeStateCollection();
-      predefinedNodes.LoadFromResource( context, resourcePath, assembly, true );
+      predefinedNodes.LoadFromResource(context, resourcePath, assembly, true);
 
       // add the predefined nodes to the node manager.
-      for ( int ii = 0; ii < predefinedNodes.Count; ii++ )
+      for (int ii = 0; ii < predefinedNodes.Count; ii++)
       {
-        AddPredefinedNode( context, predefinedNodes[ ii ] );
+        AddPredefinedNode(context, predefinedNodes[ii]);
       }
 
       // ensure the reverse refernces exist.
-      AddReverseReferences( externalReferences );
+      AddReverseReferences(externalReferences);
     }
 
     /// <summary>
     /// Loads a node set from a file or resource and addes them to the set of predefined nodes.
     /// </summary>
-    protected virtual NodeStateCollection LoadPredefinedNodes( ISystemContext context )
+    protected virtual NodeStateCollection LoadPredefinedNodes(ISystemContext context)
     {
       return new NodeStateCollection();
     }
@@ -377,29 +377,29 @@ namespace CAS.UA.Server.Library.Base
     /// </summary>
     protected virtual void LoadPredefinedNodes(
         ISystemContext context,
-        IDictionary<NodeId, IList<IReference>> externalReferences )
+        IDictionary<NodeId, IList<IReference>> externalReferences)
     {
       // load the predefined nodes from an XML document.
-      NodeStateCollection predefinedNodes = LoadPredefinedNodes( context );
+      NodeStateCollection predefinedNodes = LoadPredefinedNodes(context);
 
       // add the predefined nodes to the node manager.
-      for ( int ii = 0; ii < predefinedNodes.Count; ii++ )
+      for (int ii = 0; ii < predefinedNodes.Count; ii++)
       {
-        AddPredefinedNode( context, predefinedNodes[ ii ] );
+        AddPredefinedNode(context, predefinedNodes[ii]);
       }
 
       // ensure the reverse refernces exist.
-      AddReverseReferences( externalReferences );
+      AddReverseReferences(externalReferences);
     }
 
     /// <summary>
     /// Replaces the generic node with a node specific to the model.
     /// </summary>
-    protected virtual NodeState AddBehaviourToPredefinedNode( ISystemContext context, NodeState predefinedNode )
+    protected virtual NodeState AddBehaviourToPredefinedNode(ISystemContext context, NodeState predefinedNode)
     {
       BaseObjectState passiveNode = predefinedNode as BaseObjectState;
 
-      if ( passiveNode == null )
+      if (passiveNode == null)
       {
         return predefinedNode;
       }
@@ -410,24 +410,24 @@ namespace CAS.UA.Server.Library.Base
     /// <summary>
     /// Recursively indexes the node and its children.
     /// </summary>
-    protected virtual void AddPredefinedNode( ISystemContext context, NodeState node )
+    protected virtual void AddPredefinedNode(ISystemContext context, NodeState node)
     {
-      NodeState activeNode = AddBehaviourToPredefinedNode( context, node );
-      m_predefinedNodes[ activeNode.NodeId ] = activeNode;
+      NodeState activeNode = AddBehaviourToPredefinedNode(context, node);
+      m_predefinedNodes[activeNode.NodeId] = activeNode;
 
       BaseTypeState type = activeNode as BaseTypeState;
 
-      if ( type != null )
+      if (type != null)
       {
-        AddTypesToTypeTree( type );
+        AddTypesToTypeTree(type);
       }
 
       List<BaseInstanceState> children = new List<BaseInstanceState>();
-      activeNode.GetChildren( context, children );
+      activeNode.GetChildren(context, children);
 
-      for ( int ii = 0; ii < children.Count; ii++ )
+      for (int ii = 0; ii < children.Count; ii++)
       {
-        AddPredefinedNode( context, children[ ii ] );
+        AddPredefinedNode(context, children[ii]);
       }
     }
 
@@ -437,52 +437,52 @@ namespace CAS.UA.Server.Library.Base
     protected virtual void RemovePredefinedNode(
         ISystemContext context,
         NodeState node,
-        List<LocalReference> referencesToRemove )
+        List<LocalReference> referencesToRemove)
     {
-      m_predefinedNodes.Remove( node.NodeId );
-      node.UpdateChangeMasks( NodeStateChangeMasks.Deleted );
-      node.ClearChangeMasks( context, false );
-      OnNodeRemoved( node );
+      m_predefinedNodes.Remove(node.NodeId);
+      node.UpdateChangeMasks(NodeStateChangeMasks.Deleted);
+      node.ClearChangeMasks(context, false);
+      OnNodeRemoved(node);
 
       // remove from the parent.
       BaseInstanceState instance = node as BaseInstanceState;
 
-      if ( instance != null && instance.Parent != null )
+      if (instance != null && instance.Parent != null)
       {
-        instance.Parent.RemoveChild( instance );
+        instance.Parent.RemoveChild(instance);
       }
 
       // remove children.
       List<BaseInstanceState> children = new List<BaseInstanceState>();
-      node.GetChildren( context, children );
+      node.GetChildren(context, children);
 
-      for ( int ii = 0; ii < children.Count; ii++ )
+      for (int ii = 0; ii < children.Count; ii++)
       {
-        node.RemoveChild( children[ ii ] );
+        node.RemoveChild(children[ii]);
       }
 
-      for ( int ii = 0; ii < children.Count; ii++ )
+      for (int ii = 0; ii < children.Count; ii++)
       {
-        RemovePredefinedNode( context, children[ ii ], referencesToRemove );
+        RemovePredefinedNode(context, children[ii], referencesToRemove);
       }
 
       // remove from type table.
       BaseTypeState type = node as BaseTypeState;
 
-      if ( type != null )
+      if (type != null)
       {
-        m_server.TypeTree.Remove( type.NodeId );
+        m_server.TypeTree.Remove(type.NodeId);
       }
 
       // remove inverse references.
       List<IReference> references = new List<IReference>();
-      node.GetReferences( context, references );
+      node.GetReferences(context, references);
 
-      for ( int ii = 0; ii < references.Count; ii++ )
+      for (int ii = 0; ii < references.Count; ii++)
       {
-        IReference reference = references[ ii ];
+        IReference reference = references[ii];
 
-        if ( reference.TargetId.IsAbsolute )
+        if (reference.TargetId.IsAbsolute)
         {
           continue;
         }
@@ -491,16 +491,16 @@ namespace CAS.UA.Server.Library.Base
             (NodeId)reference.TargetId,
             reference.ReferenceTypeId,
             reference.IsInverse,
-            node.NodeId );
+            node.NodeId);
 
-        referencesToRemove.Add( referenceToRemove );
+        referencesToRemove.Add(referenceToRemove);
       }
     }
 
     /// <summary>
     /// Called after a node has been deleted.
     /// </summary>
-    protected virtual void OnNodeRemoved( NodeState node )
+    protected virtual void OnNodeRemoved(NodeState node)
     {
       // overridden by the sub-class.            
     }
@@ -508,32 +508,32 @@ namespace CAS.UA.Server.Library.Base
     /// <summary>
     /// Add the node to the set of root notifiers.
     /// </summary>
-    protected virtual void AddRootNotifier( NodeState notifier )
+    protected virtual void AddRootNotifier(NodeState notifier)
     {
-      for ( int ii = 0; ii < m_rootNotifiers.Count; ii++ )
+      for (int ii = 0; ii < m_rootNotifiers.Count; ii++)
       {
-        if ( Object.ReferenceEquals( notifier, m_rootNotifiers[ ii ] ) )
+        if (Object.ReferenceEquals(notifier, m_rootNotifiers[ii]))
         {
           return;
         }
       }
 
-      m_rootNotifiers.Add( notifier );
+      m_rootNotifiers.Add(notifier);
 
       // subscribe to existing events.
-      if ( m_server.EventManager != null )
+      if (m_server.EventManager != null)
       {
         IList<IEventMonitoredItem> monitoredItems = m_server.EventManager.GetMonitoredItems();
 
-        for ( int ii = 0; ii < monitoredItems.Count; ii++ )
+        for (int ii = 0; ii < monitoredItems.Count; ii++)
         {
-          if ( monitoredItems[ ii ].MonitoringAllEvents )
+          if (monitoredItems[ii].MonitoringAllEvents)
           {
             SubscribeToAllEvents(
                 SystemContext,
-                monitoredItems[ ii ],
+                monitoredItems[ii],
                 true,
-                notifier );
+                notifier);
           }
         }
       }
@@ -542,13 +542,13 @@ namespace CAS.UA.Server.Library.Base
     /// <summary>
     /// Remove the node from the set of root notifiers.
     /// </summary>
-    protected virtual void RemoveRootNotifier( NodeState notifier )
+    protected virtual void RemoveRootNotifier(NodeState notifier)
     {
-      for ( int ii = 0; ii < m_rootNotifiers.Count; ii++ )
+      for (int ii = 0; ii < m_rootNotifiers.Count; ii++)
       {
-        if ( Object.ReferenceEquals( notifier, m_rootNotifiers[ ii ] ) )
+        if (Object.ReferenceEquals(notifier, m_rootNotifiers[ii]))
         {
-          m_rootNotifiers.RemoveAt( ii );
+          m_rootNotifiers.RemoveAt(ii);
           break;
         }
       }
@@ -558,43 +558,43 @@ namespace CAS.UA.Server.Library.Base
     /// Ensures that all reverse references exist.
     /// </summary>
     /// <param name="externalReferences">A list of references to add to external targets.</param>
-    protected virtual void AddReverseReferences( IDictionary<NodeId, IList<IReference>> externalReferences )
+    protected virtual void AddReverseReferences(IDictionary<NodeId, IList<IReference>> externalReferences)
     {
-      foreach ( NodeState source in m_predefinedNodes.Values )
+      foreach (NodeState source in m_predefinedNodes.Values)
       {
         // assign a default value to any variable value.
         BaseVariableState variable = source as BaseVariableState;
 
-        if ( variable != null && variable.Value == null )
+        if (variable != null && variable.Value == null)
         {
-          variable.Value = TypeInfo.GetDefaultValue( variable.DataType, variable.ValueRank, Server.TypeTree );
+          variable.Value = Opc.Ua.TypeInfo.GetDefaultValue(variable.DataType, variable.ValueRank, Server.TypeTree);
         }
 
         // add reference from supertype for type nodes.
         BaseTypeState type = source as BaseTypeState;
 
-        if ( type != null && !NodeId.IsNull( type.SuperTypeId ) )
+        if (type != null && !NodeId.IsNull(type.SuperTypeId))
         {
-          if ( !IsNodeIdInNamespace( type.SuperTypeId ) )
+          if (!IsNodeIdInNamespace(type.SuperTypeId))
           {
             AddExternalReference(
                 type.SuperTypeId,
                 ReferenceTypeIds.HasSubtype,
                 false,
                 type.NodeId,
-                externalReferences );
+                externalReferences);
           }
         }
 
         IList<IReference> references = new List<IReference>();
-        source.GetReferences( SystemContext, references );
+        source.GetReferences(SystemContext, references);
 
-        for ( int ii = 0; ii < references.Count; ii++ )
+        for (int ii = 0; ii < references.Count; ii++)
         {
-          IReference reference = references[ ii ];
+          IReference reference = references[ii];
 
           // nothing to do with external nodes.
-          if ( reference.TargetId == null || reference.TargetId.IsAbsolute )
+          if (reference.TargetId == null || reference.TargetId.IsAbsolute)
           {
             continue;
           }
@@ -604,24 +604,24 @@ namespace CAS.UA.Server.Library.Base
           // add inverse reference to internal targets.
           NodeState target = null;
 
-          if ( m_predefinedNodes.TryGetValue( targetId, out target ) )
+          if (m_predefinedNodes.TryGetValue(targetId, out target))
           {
-            if ( !target.ReferenceExists( reference.ReferenceTypeId, !reference.IsInverse, source.NodeId ) )
+            if (!target.ReferenceExists(reference.ReferenceTypeId, !reference.IsInverse, source.NodeId))
             {
-              target.AddReference( reference.ReferenceTypeId, !reference.IsInverse, source.NodeId );
+              target.AddReference(reference.ReferenceTypeId, !reference.IsInverse, source.NodeId);
             }
 
             continue;
           }
 
           // check for inverse references to external notifiers.
-          if ( reference.IsInverse && reference.ReferenceTypeId == ReferenceTypeIds.HasNotifier )
+          if (reference.IsInverse && reference.ReferenceTypeId == ReferenceTypeIds.HasNotifier)
           {
-            AddRootNotifier( source );
+            AddRootNotifier(source);
           }
 
           // nothing more to do for references to nodes managed by this manager.
-          if ( IsNodeIdInNamespace( targetId ) )
+          if (IsNodeIdInNamespace(targetId))
           {
             continue;
           }
@@ -632,7 +632,7 @@ namespace CAS.UA.Server.Library.Base
               reference.ReferenceTypeId,
               !reference.IsInverse,
               source.NodeId,
-              externalReferences );
+              externalReferences);
         }
       }
     }
@@ -645,14 +645,14 @@ namespace CAS.UA.Server.Library.Base
         NodeId referenceTypeId,
         bool isInverse,
         NodeId targetId,
-        IDictionary<NodeId, IList<IReference>> externalReferences )
+        IDictionary<NodeId, IList<IReference>> externalReferences)
     {
       // get list of references to external nodes.
       IList<IReference> referencesToAdd = null;
 
-      if ( !externalReferences.TryGetValue( sourceId, out referencesToAdd ) )
+      if (!externalReferences.TryGetValue(sourceId, out referencesToAdd))
       {
-        externalReferences[ sourceId ] = referencesToAdd = new List<IReference>();
+        externalReferences[sourceId] = referencesToAdd = new List<IReference>();
       }
 
       // add reserve reference from external node.
@@ -662,68 +662,68 @@ namespace CAS.UA.Server.Library.Base
       referenceToAdd.IsInverse = isInverse;
       referenceToAdd.TargetId = targetId;
 
-      referencesToAdd.Add( referenceToAdd );
+      referencesToAdd.Add(referenceToAdd);
     }
 
     /// <summary>
     /// Recursively adds the types to the type tree.
     /// </summary>
-    protected void AddTypesToTypeTree( BaseTypeState type )
+    protected void AddTypesToTypeTree(BaseTypeState type)
     {
-      if ( !NodeId.IsNull( type.SuperTypeId ) )
+      if (!NodeId.IsNull(type.SuperTypeId))
       {
-        if ( !Server.TypeTree.IsKnown( type.SuperTypeId ) )
+        if (!Server.TypeTree.IsKnown(type.SuperTypeId))
         {
-          AddTypesToTypeTree( type.SuperTypeId );
+          AddTypesToTypeTree(type.SuperTypeId);
         }
       }
 
-      if ( type.NodeClass != NodeClass.ReferenceType )
+      if (type.NodeClass != NodeClass.ReferenceType)
       {
-        Server.TypeTree.AddSubtype( type.NodeId, type.SuperTypeId );
+        Server.TypeTree.AddSubtype(type.NodeId, type.SuperTypeId);
       }
       else
       {
-        Server.TypeTree.AddReferenceSubtype( type.NodeId, type.SuperTypeId, type.BrowseName );
+        Server.TypeTree.AddReferenceSubtype(type.NodeId, type.SuperTypeId, type.BrowseName);
       }
     }
 
     /// <summary>
     /// Recursively adds the types to the type tree.
     /// </summary>
-    protected void AddTypesToTypeTree( NodeId typeId )
+    protected void AddTypesToTypeTree(NodeId typeId)
     {
-      BaseTypeState type = Find( typeId ) as BaseTypeState;
+      BaseTypeState type = Find(typeId) as BaseTypeState;
 
-      if ( type == null )
+      if (type == null)
       {
         return;
       }
 
-      AddTypesToTypeTree( type );
+      AddTypesToTypeTree(type);
     }
 
     /// <summary>
     /// Finds the specified and checks if it is of the expected type. 
     /// </summary>
     /// <returns>Returns null if not found or not of the correct type.</returns>
-    public NodeState FindPredefinedNode( NodeId nodeId, Type expectedType )
+    public NodeState FindPredefinedNode(NodeId nodeId, Type expectedType)
     {
-      if ( nodeId == null )
+      if (nodeId == null)
       {
         return null;
       }
 
       NodeState node = null;
 
-      if ( !PredefinedNodes.TryGetValue( nodeId, out node ) )
+      if (!PredefinedNodes.TryGetValue(nodeId, out node))
       {
         return null;
       }
 
-      if ( expectedType != null )
+      if (expectedType != null)
       {
-        if ( !expectedType.IsInstanceOfType( node ) )
+        if (!expectedType.IsInstanceOfType(node))
         {
           return null;
         }
@@ -738,7 +738,7 @@ namespace CAS.UA.Server.Library.Base
     /// </summary>
     public virtual void DeleteAddressSpace()
     {
-      lock ( Lock )
+      lock (Lock)
       {
         m_predefinedNodes.Clear();
       }
@@ -752,11 +752,11 @@ namespace CAS.UA.Server.Library.Base
     /// NodeManager it should return a handle that does not require the NodeId to be validated again when
     /// the handle is passed into other methods such as 'Read' or 'Write'.
     /// </remarks>
-    public virtual object GetManagerHandle( NodeId nodeId )
+    public virtual object GetManagerHandle(NodeId nodeId)
     {
-      lock ( Lock )
+      lock (Lock)
       {
-        return GetManagerHandle( m_systemContext, nodeId, null );
+        return GetManagerHandle(m_systemContext, nodeId, null);
       }
     }
 
@@ -768,12 +768,12 @@ namespace CAS.UA.Server.Library.Base
     /// NodeManager it should return a handle that does not require the NodeId to be validated again when
     /// the handle is passed into other methods such as 'Read' or 'Write'.
     /// </remarks>
-    protected virtual object GetManagerHandle( ISystemContext context, NodeId nodeId, IDictionary<NodeId, NodeState> cache )
+    protected virtual object GetManagerHandle(ISystemContext context, NodeId nodeId, IDictionary<NodeId, NodeState> cache)
     {
-      lock ( Lock )
+      lock (Lock)
       {
         // quickly exclude nodes that not in the namespace.
-        if ( !IsNodeIdInNamespace( nodeId ) )
+        if (!IsNodeIdInNamespace(nodeId))
         {
           return null;
         }
@@ -781,7 +781,7 @@ namespace CAS.UA.Server.Library.Base
         // lookup the node.
         NodeState node = null;
 
-        if ( !m_predefinedNodes.TryGetValue( nodeId, out node ) )
+        if (!m_predefinedNodes.TryGetValue(nodeId, out node))
         {
           return null;
         }
@@ -796,24 +796,24 @@ namespace CAS.UA.Server.Library.Base
     /// <remarks>
     /// The additional references are optional, however, the NodeManager should support them.
     /// </remarks>
-    public virtual void AddReferences( IDictionary<NodeId, IList<IReference>> references )
+    public virtual void AddReferences(IDictionary<NodeId, IList<IReference>> references)
     {
-      lock ( Lock )
+      lock (Lock)
       {
-        foreach ( KeyValuePair<NodeId, IList<IReference>> current in references )
+        foreach (KeyValuePair<NodeId, IList<IReference>> current in references)
         {
           // check for valid handle.
-          NodeState source = GetManagerHandle( m_systemContext, current.Key, null ) as NodeState;
+          NodeState source = GetManagerHandle(m_systemContext, current.Key, null) as NodeState;
 
-          if ( source == null )
+          if (source == null)
           {
             return;
           }
 
           // add reference to external target.
-          foreach ( IReference reference in current.Value )
+          foreach (IReference reference in current.Value)
           {
-            source.AddReference( reference.ReferenceTypeId, reference.IsInverse, reference.TargetId );
+            source.AddReference(reference.ReferenceTypeId, reference.IsInverse, reference.TargetId);
           }
         }
       }
@@ -827,30 +827,30 @@ namespace CAS.UA.Server.Library.Base
         NodeId referenceTypeId,
         bool isInverse,
         ExpandedNodeId targetId,
-        bool deleteBiDirectional )
+        bool deleteBiDirectional)
     {
-      lock ( Lock )
+      lock (Lock)
       {
         // check for valid handle.
-        NodeState source = IsHandleInNamespace( sourceHandle );
+        NodeState source = IsHandleInNamespace(sourceHandle);
 
-        if ( source == null )
+        if (source == null)
         {
           return StatusCodes.BadNodeIdUnknown;
         }
 
-        source.RemoveReference( referenceTypeId, isInverse, targetId );
+        source.RemoveReference(referenceTypeId, isInverse, targetId);
 
-        if ( deleteBiDirectional )
+        if (deleteBiDirectional)
         {
           // check if the target is also managed by the node manager.
-          if ( !targetId.IsAbsolute )
+          if (!targetId.IsAbsolute)
           {
-            NodeState target = GetManagerHandle( m_systemContext, (NodeId)targetId, null ) as NodeState;
+            NodeState target = GetManagerHandle(m_systemContext, (NodeId)targetId, null) as NodeState;
 
-            if ( target != null )
+            if (target != null)
             {
-              target.RemoveReference( referenceTypeId, !isInverse, source.NodeId );
+              target.RemoveReference(referenceTypeId, !isInverse, source.NodeId);
             }
           }
         }
@@ -868,22 +868,22 @@ namespace CAS.UA.Server.Library.Base
     public virtual NodeMetadata GetNodeMetadata(
         OperationContext context,
         object targetHandle,
-        BrowseResultMask resultMask )
+        BrowseResultMask resultMask)
     {
-      ServerSystemContext systemContext = m_systemContext.Copy( context );
+      ServerSystemContext systemContext = m_systemContext.Copy(context);
 
-      lock ( Lock )
+      lock (Lock)
       {
         // check for valid handle.
-        NodeState target = IsHandleInNamespace( targetHandle );
+        NodeState target = IsHandleInNamespace(targetHandle);
 
-        if ( target == null )
+        if (target == null)
         {
           return null;
         }
 
         // validate node.
-        if ( !ValidateNode( systemContext, target ) )
+        if (!ValidateNode(systemContext, target))
         {
           return null;
         }
@@ -900,49 +900,49 @@ namespace CAS.UA.Server.Library.Base
             Attributes.UserAccessLevel,
             Attributes.EventNotifier,
             Attributes.Executable,
-            Attributes.UserExecutable );
+            Attributes.UserExecutable);
 
         // construct the metadata object.
 
-        NodeMetadata metadata = new NodeMetadata( target, target.NodeId );
+        NodeMetadata metadata = new NodeMetadata(target, target.NodeId);
 
         metadata.NodeClass = target.NodeClass;
         metadata.BrowseName = target.BrowseName;
         metadata.DisplayName = target.DisplayName;
 
-        if ( values[ 0 ] != null && values[ 1 ] != null )
+        if (values[0] != null && values[1] != null)
         {
-          metadata.WriteMask = (AttributeWriteMask)( ( (uint)values[ 0 ] ) & ( (uint)values[ 1 ] ) );
+          metadata.WriteMask = (AttributeWriteMask)(((uint)values[0]) & ((uint)values[1]));
         }
 
-        metadata.DataType = (NodeId)values[ 2 ];
+        metadata.DataType = (NodeId)values[2];
 
-        if ( values[ 3 ] != null )
+        if (values[3] != null)
         {
-          metadata.ValueRank = (int)values[ 3 ];
+          metadata.ValueRank = (int)values[3];
         }
 
-        metadata.ArrayDimensions = (IList<uint>)values[ 4 ];
+        metadata.ArrayDimensions = (IList<uint>)values[4];
 
-        if ( values[ 5 ] != null && values[ 6 ] != null )
+        if (values[5] != null && values[6] != null)
         {
-          metadata.AccessLevel = (byte)( ( (byte)values[ 5 ] ) & ( (byte)values[ 6 ] ) );
+          metadata.AccessLevel = (byte)(((byte)values[5]) & ((byte)values[6]));
         }
 
-        if ( values[ 7 ] != null )
+        if (values[7] != null)
         {
-          metadata.EventNotifier = (byte)values[ 7 ];
+          metadata.EventNotifier = (byte)values[7];
         }
 
-        if ( values[ 8 ] != null && values[ 9 ] != null )
+        if (values[8] != null && values[9] != null)
         {
-          metadata.Executable = ( ( (bool)values[ 8 ] ) && ( (bool)values[ 9 ] ) );
+          metadata.Executable = (((bool)values[8]) && ((bool)values[9]));
         }
 
         // get instance references.
         BaseInstanceState instance = target as BaseInstanceState;
 
-        if ( instance != null )
+        if (instance != null)
         {
           metadata.TypeDefinition = instance.TypeDefinitionId;
           metadata.ModellingRule = instance.ModellingRuleId;
@@ -963,42 +963,42 @@ namespace CAS.UA.Server.Library.Base
     public virtual void Browse(
         OperationContext context,
         ref ContinuationPoint continuationPoint,
-        IList<ReferenceDescription> references )
+        IList<ReferenceDescription> references)
     {
-      if ( continuationPoint == null )
-        throw new ArgumentNullException( "continuationPoint" );
-      if ( references == null )
-        throw new ArgumentNullException( "references" );
+      if (continuationPoint == null)
+        throw new ArgumentNullException("continuationPoint");
+      if (references == null)
+        throw new ArgumentNullException("references");
 
       // check for view.
-      if ( !ViewDescription.IsDefault( continuationPoint.View ) )
+      if (!ViewDescription.IsDefault(continuationPoint.View))
       {
-        throw new ServiceResultException( StatusCodes.BadViewIdUnknown );
+        throw new ServiceResultException(StatusCodes.BadViewIdUnknown);
       }
 
-      ServerSystemContext systemContext = m_systemContext.Copy( context );
+      ServerSystemContext systemContext = m_systemContext.Copy(context);
 
-      lock ( Lock )
+      lock (Lock)
       {
         // verify that the node exists.
-        NodeState source = IsHandleInNamespace( continuationPoint.NodeToBrowse );
+        NodeState source = IsHandleInNamespace(continuationPoint.NodeToBrowse);
 
-        if ( source == null )
+        if (source == null)
         {
-          throw new ServiceResultException( StatusCodes.BadNodeIdUnknown );
+          throw new ServiceResultException(StatusCodes.BadNodeIdUnknown);
         }
 
         // validate node.
-        if ( !ValidateNode( systemContext, source ) )
+        if (!ValidateNode(systemContext, source))
         {
-          throw new ServiceResultException( StatusCodes.BadNodeIdUnknown );
+          throw new ServiceResultException(StatusCodes.BadNodeIdUnknown);
         }
 
         // check for previous continuation point.
         INodeBrowser browser = continuationPoint.Data as INodeBrowser;
 
         // fetch list of references.
-        if ( browser == null )
+        if (browser == null)
         {
           // create a new browser.
           browser = source.CreateBrowser(
@@ -1009,29 +1009,29 @@ namespace CAS.UA.Server.Library.Base
               continuationPoint.BrowseDirection,
               null,
               null,
-              false );
+              false);
         }
 
         // apply filters to references.
-        for ( IReference reference = browser.Next(); reference != null; reference = browser.Next() )
+        for (IReference reference = browser.Next(); reference != null; reference = browser.Next())
         {
           // create the type definition reference.        
-          ReferenceDescription description = GetReferenceDescription( context, reference, continuationPoint );
+          ReferenceDescription description = GetReferenceDescription(context, reference, continuationPoint);
 
-          if ( description == null )
+          if (description == null)
           {
             continue;
           }
 
           // check if limit reached.
-          if ( continuationPoint.MaxResultsToReturn != 0 && references.Count >= continuationPoint.MaxResultsToReturn )
+          if (continuationPoint.MaxResultsToReturn != 0 && references.Count >= continuationPoint.MaxResultsToReturn)
           {
-            browser.Push( reference );
+            browser.Push(reference);
             continuationPoint.Data = browser;
             return;
           }
 
-          references.Add( description );
+          references.Add(description);
         }
 
         // release the continuation point if all done.
@@ -1047,19 +1047,19 @@ namespace CAS.UA.Server.Library.Base
     private ReferenceDescription GetReferenceDescription(
         OperationContext context,
         IReference reference,
-        ContinuationPoint continuationPoint )
+        ContinuationPoint continuationPoint)
     {
       // create the type definition reference.        
       ReferenceDescription description = new ReferenceDescription();
 
       description.NodeId = reference.TargetId;
-      description.SetReferenceType( continuationPoint.ResultMask, reference.ReferenceTypeId, !reference.IsInverse );
+      description.SetReferenceType(continuationPoint.ResultMask, reference.ReferenceTypeId, !reference.IsInverse);
 
       // do not cache target parameters for remote nodes.
-      if ( reference.TargetId.IsAbsolute )
+      if (reference.TargetId.IsAbsolute)
       {
         // only return remote references if no node class filter is specified.
-        if ( continuationPoint.NodeClassMask != 0 )
+        if (continuationPoint.NodeClassMask != 0)
         {
           return null;
         }
@@ -1072,19 +1072,19 @@ namespace CAS.UA.Server.Library.Base
       // check for local reference.
       NodeStateReference referenceInfo = reference as NodeStateReference;
 
-      if ( referenceInfo != null )
+      if (referenceInfo != null)
       {
         target = referenceInfo.Target;
       }
 
       // check for internal reference.
-      if ( target == null )
+      if (target == null)
       {
         NodeId targetId = (NodeId)reference.TargetId;
 
-        if ( IsNodeIdInNamespace( targetId ) )
+        if (IsNodeIdInNamespace(targetId))
         {
-          if ( !PredefinedNodes.TryGetValue( targetId, out target ) )
+          if (!PredefinedNodes.TryGetValue(targetId, out target))
           {
             target = null;
           }
@@ -1094,14 +1094,14 @@ namespace CAS.UA.Server.Library.Base
       // the target may be a reference to a node in another node manager. In these cases
       // the target attributes must be fetched by the caller. The Unfiltered flag tells the
       // caller to do that.
-      if ( target == null )
+      if (target == null)
       {
         description.Unfiltered = true;
         return description;
       }
 
       // apply node class filter.
-      if ( continuationPoint.NodeClassMask != 0 && ( ( continuationPoint.NodeClassMask & (uint)target.NodeClass ) == 0 ) )
+      if (continuationPoint.NodeClassMask != 0 && ((continuationPoint.NodeClassMask & (uint)target.NodeClass) == 0))
       {
         return null;
       }
@@ -1110,7 +1110,7 @@ namespace CAS.UA.Server.Library.Base
 
       BaseInstanceState instance = target as BaseInstanceState;
 
-      if ( instance != null )
+      if (instance != null)
       {
         typeDefinition = instance.TypeDefinitionId;
       }
@@ -1121,7 +1121,7 @@ namespace CAS.UA.Server.Library.Base
           target.NodeClass,
           target.BrowseName,
           target.DisplayName,
-          typeDefinition );
+          typeDefinition);
 
       return description;
     }
@@ -1140,23 +1140,23 @@ namespace CAS.UA.Server.Library.Base
         object sourceHandle,
         RelativePathElement relativePath,
         IList<ExpandedNodeId> targetIds,
-        IList<NodeId> unresolvedTargetIds )
+        IList<NodeId> unresolvedTargetIds)
     {
-      ServerSystemContext systemContext = m_systemContext.Copy( context );
+      ServerSystemContext systemContext = m_systemContext.Copy(context);
       IDictionary<NodeId, NodeState> operationCache = new NodeIdDictionary<NodeState>();
 
-      lock ( Lock )
+      lock (Lock)
       {
         // verify that the node exists.
-        NodeState source = IsHandleInNamespace( sourceHandle );
+        NodeState source = IsHandleInNamespace(sourceHandle);
 
-        if ( source == null )
+        if (source == null)
         {
           return;
         }
 
         // validate node.
-        if ( !ValidateNode( systemContext, source ) )
+        if (!ValidateNode(systemContext, source))
         {
           return;
         }
@@ -1167,18 +1167,18 @@ namespace CAS.UA.Server.Library.Base
             null,
             relativePath.ReferenceTypeId,
             relativePath.IncludeSubtypes,
-            ( relativePath.IsInverse ) ? BrowseDirection.Inverse : BrowseDirection.Forward,
+            (relativePath.IsInverse) ? BrowseDirection.Inverse : BrowseDirection.Forward,
             relativePath.TargetName,
             null,
-            false );
+            false);
 
         // check the browse names.
         try
         {
-          for ( IReference reference = browser.Next(); reference != null; reference = browser.Next() )
+          for (IReference reference = browser.Next(); reference != null; reference = browser.Next())
           {
             // ignore unknown external references.
-            if ( reference.TargetId.IsAbsolute )
+            if (reference.TargetId.IsAbsolute)
             {
               continue;
             }
@@ -1188,35 +1188,35 @@ namespace CAS.UA.Server.Library.Base
             // check for local reference.
             NodeStateReference referenceInfo = reference as NodeStateReference;
 
-            if ( referenceInfo != null )
+            if (referenceInfo != null)
             {
               target = referenceInfo.Target;
             }
 
-            if ( target == null )
+            if (target == null)
             {
               NodeId targetId = (NodeId)reference.TargetId;
 
               // the target may be a reference to a node in another node manager.
-              if ( !IsNodeIdInNamespace( targetId ) )
+              if (!IsNodeIdInNamespace(targetId))
               {
-                unresolvedTargetIds.Add( (NodeId)reference.TargetId );
+                unresolvedTargetIds.Add((NodeId)reference.TargetId);
                 continue;
               }
 
               // look up the target manually.
-              target = GetManagerHandle( systemContext, targetId, operationCache ) as NodeState;
+              target = GetManagerHandle(systemContext, targetId, operationCache) as NodeState;
 
-              if ( target == null )
+              if (target == null)
               {
                 continue;
               }
             }
 
             // check browse name.
-            if ( target.BrowseName == relativePath.TargetName )
+            if (target.BrowseName == relativePath.TargetName)
             {
-              targetIds.Add( reference.TargetId );
+              targetIds.Add(reference.TargetId);
             }
           }
         }
@@ -1235,28 +1235,28 @@ namespace CAS.UA.Server.Library.Base
         double maxAge,
         IList<ReadValueId> nodesToRead,
         IList<DataValue> values,
-        IList<ServiceResult> errors )
+        IList<ServiceResult> errors)
     {
-      ServerSystemContext systemContext = m_systemContext.Copy( context );
+      ServerSystemContext systemContext = m_systemContext.Copy(context);
       IDictionary<NodeId, NodeState> operationCache = new NodeIdDictionary<NodeState>();
       List<ReadWriteOperationState> nodesToValidate = new List<ReadWriteOperationState>();
 
-      lock ( Lock )
+      lock (Lock)
       {
-        for ( int ii = 0; ii < nodesToRead.Count; ii++ )
+        for (int ii = 0; ii < nodesToRead.Count; ii++)
         {
-          ReadValueId nodeToRead = nodesToRead[ ii ];
+          ReadValueId nodeToRead = nodesToRead[ii];
 
           // skip items that have already been processed.
-          if ( nodeToRead.Processed )
+          if (nodeToRead.Processed)
           {
             continue;
           }
 
           // check for valid handle.
-          NodeState source = GetManagerHandle( systemContext, nodeToRead.NodeId, operationCache ) as NodeState;
+          NodeState source = GetManagerHandle(systemContext, nodeToRead.NodeId, operationCache) as NodeState;
 
-          if ( source == null )
+          if (source == null)
           {
             continue;
           }
@@ -1265,7 +1265,7 @@ namespace CAS.UA.Server.Library.Base
           nodeToRead.Processed = true;
 
           // create an initial value.
-          DataValue value = values[ ii ] = new DataValue();
+          DataValue value = values[ii] = new DataValue();
 
           value.Value = null;
           value.ServerTimestamp = DateTime.UtcNow;
@@ -1273,9 +1273,9 @@ namespace CAS.UA.Server.Library.Base
           value.StatusCode = StatusCodes.Good;
 
           // check if the node is ready for reading.
-          if ( source.ValidationRequired )
+          if (source.ValidationRequired)
           {
-            errors[ ii ] = StatusCodes.BadNodeIdUnknown;
+            errors[ii] = StatusCodes.BadNodeIdUnknown;
 
             // must validate node in a seperate operation.
             ReadWriteOperationState operation = new ReadWriteOperationState();
@@ -1283,46 +1283,46 @@ namespace CAS.UA.Server.Library.Base
             operation.Source = source;
             operation.Index = ii;
 
-            nodesToValidate.Add( operation );
+            nodesToValidate.Add(operation);
 
             continue;
           }
 
           // read the attribute value.
-          errors[ ii ] = source.ReadAttribute(
+          errors[ii] = source.ReadAttribute(
               systemContext,
               nodeToRead.AttributeId,
               nodeToRead.ParsedIndexRange,
               nodeToRead.DataEncoding,
-              value );
+              value);
         }
 
         // check for nothing to do.
-        if ( nodesToValidate.Count == 0 )
+        if (nodesToValidate.Count == 0)
         {
           return;
         }
 
         // validates the nodes (reads values from the underlying data source if required).
-        for ( int ii = 0; ii < nodesToValidate.Count; ii++ )
+        for (int ii = 0; ii < nodesToValidate.Count; ii++)
         {
-          ReadWriteOperationState operation = nodesToValidate[ ii ];
+          ReadWriteOperationState operation = nodesToValidate[ii];
 
-          if ( !ValidateNode( systemContext, operation.Source ) )
+          if (!ValidateNode(systemContext, operation.Source))
           {
             continue;
           }
 
-          ReadValueId nodeToRead = nodesToRead[ operation.Index ];
-          DataValue value = values[ operation.Index ];
+          ReadValueId nodeToRead = nodesToRead[operation.Index];
+          DataValue value = values[operation.Index];
 
           // update the attribute value.
-          errors[ operation.Index ] = operation.Source.ReadAttribute(
+          errors[operation.Index] = operation.Source.ReadAttribute(
               systemContext,
               nodeToRead.AttributeId,
               nodeToRead.ParsedIndexRange,
               nodeToRead.DataEncoding,
-              value );
+              value);
         }
       }
     }
@@ -1339,12 +1339,12 @@ namespace CAS.UA.Server.Library.Base
     /// <summary>
     /// Verifies that the specified node exists.
     /// </summary>
-    protected virtual bool ValidateNode( ServerSystemContext context, NodeState node )
+    protected virtual bool ValidateNode(ServerSystemContext context, NodeState node)
     {
       // validate node only if required.
-      if ( node.ValidationRequired )
+      if (node.ValidationRequired)
       {
-        return node.Validate( context );
+        return node.Validate(context);
       }
 
       return true;
@@ -1360,29 +1360,29 @@ namespace CAS.UA.Server.Library.Base
         bool releaseContinuationPoints,
         IList<HistoryReadValueId> nodesToRead,
         IList<HistoryReadResult> results,
-        IList<ServiceResult> errors )
+        IList<ServiceResult> errors)
     {
-      ServerSystemContext systemContext = m_systemContext.Copy( context );
+      ServerSystemContext systemContext = m_systemContext.Copy(context);
       IDictionary<NodeId, NodeState> operationCache = new NodeIdDictionary<NodeState>();
       List<ReadWriteOperationState> nodesToValidate = new List<ReadWriteOperationState>();
       List<ReadWriteOperationState> readsToComplete = new List<ReadWriteOperationState>();
 
-      lock ( Lock )
+      lock (Lock)
       {
-        for ( int ii = 0; ii < nodesToRead.Count; ii++ )
+        for (int ii = 0; ii < nodesToRead.Count; ii++)
         {
-          HistoryReadValueId nodeToRead = nodesToRead[ ii ];
+          HistoryReadValueId nodeToRead = nodesToRead[ii];
 
           // skip items that have already been processed.
-          if ( nodeToRead.Processed )
+          if (nodeToRead.Processed)
           {
             continue;
           }
 
           // check for valid handle.
-          NodeState source = GetManagerHandle( systemContext, nodeToRead.NodeId, operationCache ) as NodeState;
+          NodeState source = GetManagerHandle(systemContext, nodeToRead.NodeId, operationCache) as NodeState;
 
-          if ( source == null )
+          if (source == null)
           {
             continue;
           }
@@ -1393,13 +1393,13 @@ namespace CAS.UA.Server.Library.Base
           // only variables supported.
           BaseVariableState variable = source as BaseVariableState;
 
-          if ( variable == null )
+          if (variable == null)
           {
-            errors[ ii ] = StatusCodes.BadHistoryOperationUnsupported;
+            errors[ii] = StatusCodes.BadHistoryOperationUnsupported;
             continue;
           }
 
-          results[ ii ] = new HistoryReadResult();
+          results[ii] = new HistoryReadResult();
 
           ReadWriteOperationState operation = new ReadWriteOperationState();
 
@@ -1407,45 +1407,45 @@ namespace CAS.UA.Server.Library.Base
           operation.Index = ii;
 
           // check if the node is ready for reading.
-          if ( source.ValidationRequired )
+          if (source.ValidationRequired)
           {
             // must validate node in a seperate operation.
-            errors[ ii ] = StatusCodes.BadNodeIdUnknown;
-            nodesToValidate.Add( operation );
+            errors[ii] = StatusCodes.BadNodeIdUnknown;
+            nodesToValidate.Add(operation);
             continue;
           }
 
           // read the data.
-          readsToComplete.Add( operation );
+          readsToComplete.Add(operation);
         }
 
         // validates the nodes (reads values from the underlying data source if required).
-        for ( int ii = 0; ii < nodesToValidate.Count; ii++ )
+        for (int ii = 0; ii < nodesToValidate.Count; ii++)
         {
-          ReadWriteOperationState operation = nodesToValidate[ ii ];
+          ReadWriteOperationState operation = nodesToValidate[ii];
 
-          if ( !ValidateNode( systemContext, operation.Source ) )
+          if (!ValidateNode(systemContext, operation.Source))
           {
             continue;
           }
 
-          readsToComplete.Add( operation );
+          readsToComplete.Add(operation);
         }
       }
 
       // reads the data without holding onto the lock.
-      for ( int ii = 0; ii < readsToComplete.Count; ii++ )
+      for (int ii = 0; ii < readsToComplete.Count; ii++)
       {
-        ReadWriteOperationState operation = readsToComplete[ ii ];
+        ReadWriteOperationState operation = readsToComplete[ii];
 
-        errors[ operation.Index ] = HistoryRead(
+        errors[operation.Index] = HistoryRead(
             systemContext,
             operation.Source,
             details,
             timestampsToReturn,
             releaseContinuationPoints,
-            nodesToRead[ operation.Index ],
-            results[ operation.Index ] );
+            nodesToRead[operation.Index],
+            results[operation.Index]);
       }
     }
 
@@ -1459,20 +1459,20 @@ namespace CAS.UA.Server.Library.Base
         TimestampsToReturn timestampsToReturn,
         bool releaseContinuationPoints,
         HistoryReadValueId nodesToRead,
-        HistoryReadResult result )
+        HistoryReadResult result)
     {
       // check for variable.
       BaseVariableState variable = source as BaseVariableState;
 
-      if ( variable == null )
+      if (variable == null)
       {
         return StatusCodes.BadHistoryOperationUnsupported;
       }
 
       // check for access.
-      lock ( Lock )
+      lock (Lock)
       {
-        if ( ( variable.AccessLevel & AccessLevels.HistoryRead ) == 0 )
+        if ((variable.AccessLevel & AccessLevels.HistoryRead) == 0)
         {
           return StatusCodes.BadNotReadable;
         }
@@ -1481,7 +1481,7 @@ namespace CAS.UA.Server.Library.Base
       // handle read raw.
       ReadRawModifiedDetails readRawDetails = details as ReadRawModifiedDetails;
 
-      if ( readRawDetails != null )
+      if (readRawDetails != null)
       {
         return HistoryReadRaw(
             context,
@@ -1490,13 +1490,13 @@ namespace CAS.UA.Server.Library.Base
             timestampsToReturn,
             releaseContinuationPoints,
             nodesToRead,
-            result );
+            result);
       }
 
       // handle read processed.
       ReadProcessedDetails readProcessedDetails = details as ReadProcessedDetails;
 
-      if ( readProcessedDetails != null )
+      if (readProcessedDetails != null)
       {
         return HistoryReadProcessed(
             context,
@@ -1505,13 +1505,13 @@ namespace CAS.UA.Server.Library.Base
             timestampsToReturn,
             releaseContinuationPoints,
             nodesToRead,
-            result );
+            result);
       }
 
       // handle read processed.
       ReadAtTimeDetails readAtTimeDetails = details as ReadAtTimeDetails;
 
-      if ( readAtTimeDetails != null )
+      if (readAtTimeDetails != null)
       {
         return HistoryReadAtTime(
             context,
@@ -1520,7 +1520,7 @@ namespace CAS.UA.Server.Library.Base
             timestampsToReturn,
             releaseContinuationPoints,
             nodesToRead,
-            result );
+            result);
       }
 
       return StatusCodes.BadHistoryOperationUnsupported;
@@ -1536,7 +1536,7 @@ namespace CAS.UA.Server.Library.Base
         TimestampsToReturn timestampsToReturn,
         bool releaseContinuationPoints,
         HistoryReadValueId nodeToRead,
-        HistoryReadResult result )
+        HistoryReadResult result)
     {
       return StatusCodes.BadHistoryOperationUnsupported;
     }
@@ -1551,7 +1551,7 @@ namespace CAS.UA.Server.Library.Base
         TimestampsToReturn timestampsToReturn,
         bool releaseContinuationPoints,
         HistoryReadValueId nodeToRead,
-        HistoryReadResult result )
+        HistoryReadResult result)
     {
       return StatusCodes.BadHistoryOperationUnsupported;
     }
@@ -1566,7 +1566,7 @@ namespace CAS.UA.Server.Library.Base
         TimestampsToReturn timestampsToReturn,
         bool releaseContinuationPoints,
         HistoryReadValueId nodeToRead,
-        HistoryReadResult result )
+        HistoryReadResult result)
     {
       return StatusCodes.BadHistoryOperationUnsupported;
     }
@@ -1578,28 +1578,28 @@ namespace CAS.UA.Server.Library.Base
     public virtual void Write(
         OperationContext context,
         IList<WriteValue> nodesToWrite,
-        IList<ServiceResult> errors )
+        IList<ServiceResult> errors)
     {
-      ServerSystemContext systemContext = m_systemContext.Copy( context );
+      ServerSystemContext systemContext = m_systemContext.Copy(context);
       IDictionary<NodeId, NodeState> operationCache = new NodeIdDictionary<NodeState>();
       List<ReadWriteOperationState> nodesToValidate = new List<ReadWriteOperationState>();
 
-      lock ( Lock )
+      lock (Lock)
       {
-        for ( int ii = 0; ii < nodesToWrite.Count; ii++ )
+        for (int ii = 0; ii < nodesToWrite.Count; ii++)
         {
-          WriteValue nodeToWrite = nodesToWrite[ ii ];
+          WriteValue nodeToWrite = nodesToWrite[ii];
 
           // skip items that have already been processed.
-          if ( nodeToWrite.Processed )
+          if (nodeToWrite.Processed)
           {
             continue;
           }
 
           // check for valid handle.
-          NodeState source = GetManagerHandle( systemContext, nodeToWrite.NodeId, operationCache ) as NodeState;
+          NodeState source = GetManagerHandle(systemContext, nodeToWrite.NodeId, operationCache) as NodeState;
 
-          if ( source == null )
+          if (source == null)
           {
             continue;
           }
@@ -1608,16 +1608,16 @@ namespace CAS.UA.Server.Library.Base
           nodeToWrite.Processed = true;
 
           // index range is not supported.
-          if ( !String.IsNullOrEmpty( nodeToWrite.IndexRange ) )
+          if (!String.IsNullOrEmpty(nodeToWrite.IndexRange))
           {
-            errors[ ii ] = StatusCodes.BadIndexRangeInvalid;
+            errors[ii] = StatusCodes.BadIndexRangeInvalid;
             continue;
           }
 
           // check if the node is ready for reading.
-          if ( source.ValidationRequired )
+          if (source.ValidationRequired)
           {
-            errors[ ii ] = StatusCodes.BadNodeIdUnknown;
+            errors[ii] = StatusCodes.BadNodeIdUnknown;
 
             // must validate node in a seperate operation.
             ReadWriteOperationState operation = new ReadWriteOperationState();
@@ -1625,49 +1625,49 @@ namespace CAS.UA.Server.Library.Base
             operation.Source = source;
             operation.Index = ii;
 
-            nodesToValidate.Add( operation );
+            nodesToValidate.Add(operation);
 
             continue;
           }
 
           // write the attribute value.
-          errors[ ii ] = source.WriteAttribute(
+          errors[ii] = source.WriteAttribute(
               systemContext,
               nodeToWrite.AttributeId,
               nodeToWrite.ParsedIndexRange,
-              nodeToWrite.Value );
+              nodeToWrite.Value);
 
           // updates to source finished - report changes to monitored items.
-          source.ClearChangeMasks( systemContext, false );
+          source.ClearChangeMasks(systemContext, false);
         }
 
         // check for nothing to do.
-        if ( nodesToValidate.Count == 0 )
+        if (nodesToValidate.Count == 0)
         {
           return;
         }
 
         // validates the nodes (reads values from the underlying data source if required).
-        for ( int ii = 0; ii < nodesToValidate.Count; ii++ )
+        for (int ii = 0; ii < nodesToValidate.Count; ii++)
         {
-          ReadWriteOperationState operation = nodesToValidate[ ii ];
+          ReadWriteOperationState operation = nodesToValidate[ii];
 
-          if ( !ValidateNode( systemContext, operation.Source ) )
+          if (!ValidateNode(systemContext, operation.Source))
           {
             continue;
           }
 
-          WriteValue nodeToWrite = nodesToWrite[ operation.Index ];
+          WriteValue nodeToWrite = nodesToWrite[operation.Index];
 
           // write the attribute value.
-          errors[ operation.Index ] = operation.Source.WriteAttribute(
+          errors[operation.Index] = operation.Source.WriteAttribute(
               systemContext,
               nodeToWrite.AttributeId,
               nodeToWrite.ParsedIndexRange,
-              nodeToWrite.Value );
+              nodeToWrite.Value);
 
           // updates to source finished - report changes to monitored items.
-          operation.Source.ClearChangeMasks( systemContext, false );
+          operation.Source.ClearChangeMasks(systemContext, false);
         }
       }
     }
@@ -1680,28 +1680,28 @@ namespace CAS.UA.Server.Library.Base
         Type detailsType,
         IList<HistoryUpdateDetails> nodesToUpdate,
         IList<HistoryUpdateResult> results,
-        IList<ServiceResult> errors )
+        IList<ServiceResult> errors)
     {
-      ServerSystemContext systemContext = m_systemContext.Copy( context );
+      ServerSystemContext systemContext = m_systemContext.Copy(context);
       IDictionary<NodeId, NodeState> operationCache = new NodeIdDictionary<NodeState>();
       List<ReadWriteOperationState> nodesToValidate = new List<ReadWriteOperationState>();
 
-      lock ( Lock )
+      lock (Lock)
       {
-        for ( int ii = 0; ii < nodesToUpdate.Count; ii++ )
+        for (int ii = 0; ii < nodesToUpdate.Count; ii++)
         {
-          HistoryUpdateDetails nodeToUpdate = nodesToUpdate[ ii ];
+          HistoryUpdateDetails nodeToUpdate = nodesToUpdate[ii];
 
           // skip items that have already been processed.
-          if ( nodeToUpdate.Processed )
+          if (nodeToUpdate.Processed)
           {
             continue;
           }
 
           // check for valid handle.
-          NodeState source = GetManagerHandle( systemContext, nodeToUpdate.NodeId, operationCache ) as NodeState;
+          NodeState source = GetManagerHandle(systemContext, nodeToUpdate.NodeId, operationCache) as NodeState;
 
-          if ( source == null )
+          if (source == null)
           {
             continue;
           }
@@ -1710,9 +1710,9 @@ namespace CAS.UA.Server.Library.Base
           nodeToUpdate.Processed = true;
 
           // check if the node is ready for reading.
-          if ( source.ValidationRequired )
+          if (source.ValidationRequired)
           {
-            errors[ ii ] = StatusCodes.BadNodeIdUnknown;
+            errors[ii] = StatusCodes.BadNodeIdUnknown;
 
             // must validate node in a seperate operation.
             ReadWriteOperationState operation = new ReadWriteOperationState();
@@ -1720,33 +1720,33 @@ namespace CAS.UA.Server.Library.Base
             operation.Source = source;
             operation.Index = ii;
 
-            nodesToValidate.Add( operation );
+            nodesToValidate.Add(operation);
 
             continue;
           }
 
           // historical data not available.
-          errors[ ii ] = StatusCodes.BadHistoryOperationUnsupported;
+          errors[ii] = StatusCodes.BadHistoryOperationUnsupported;
         }
 
         // check for nothing to do.
-        if ( nodesToValidate.Count == 0 )
+        if (nodesToValidate.Count == 0)
         {
           return;
         }
 
         // validates the nodes (reads values from the underlying data source if required).
-        for ( int ii = 0; ii < nodesToValidate.Count; ii++ )
+        for (int ii = 0; ii < nodesToValidate.Count; ii++)
         {
-          ReadWriteOperationState operation = nodesToValidate[ ii ];
+          ReadWriteOperationState operation = nodesToValidate[ii];
 
-          if ( !ValidateNode( systemContext, operation.Source ) )
+          if (!ValidateNode(systemContext, operation.Source))
           {
             continue;
           }
 
           // historical data not available.
-          errors[ ii ] = StatusCodes.BadHistoryOperationUnsupported;
+          errors[ii] = StatusCodes.BadHistoryOperationUnsupported;
         }
       }
     }
@@ -1758,28 +1758,28 @@ namespace CAS.UA.Server.Library.Base
         OperationContext context,
         IList<CallMethodRequest> methodsToCall,
         IList<CallMethodResult> results,
-        IList<ServiceResult> errors )
+        IList<ServiceResult> errors)
     {
-      ServerSystemContext systemContext = m_systemContext.Copy( context );
+      ServerSystemContext systemContext = m_systemContext.Copy(context);
       IDictionary<NodeId, NodeState> operationCache = new NodeIdDictionary<NodeState>();
       List<CallOperationState> nodesToValidate = new List<CallOperationState>();
 
-      lock ( Lock )
+      lock (Lock)
       {
-        for ( int ii = 0; ii < methodsToCall.Count; ii++ )
+        for (int ii = 0; ii < methodsToCall.Count; ii++)
         {
-          CallMethodRequest methodToCall = methodsToCall[ ii ];
+          CallMethodRequest methodToCall = methodsToCall[ii];
 
           // skip items that have already been processed.
-          if ( methodToCall.Processed )
+          if (methodToCall.Processed)
           {
             continue;
           }
 
           // check for valid handle.
-          NodeState source = GetManagerHandle( systemContext, methodToCall.ObjectId, operationCache ) as NodeState;
+          NodeState source = GetManagerHandle(systemContext, methodToCall.ObjectId, operationCache) as NodeState;
 
-          if ( source == null )
+          if (source == null)
           {
             continue;
           }
@@ -1788,27 +1788,27 @@ namespace CAS.UA.Server.Library.Base
           methodToCall.Processed = true;
 
           // check for valid method.
-          MethodState method = GetManagerHandle( systemContext, methodToCall.MethodId, operationCache ) as MethodState;
+          MethodState method = GetManagerHandle(systemContext, methodToCall.MethodId, operationCache) as MethodState;
 
-          if ( method == null )
+          if (method == null)
           {
-            errors[ ii ] = StatusCodes.BadMethodInvalid;
+            errors[ii] = StatusCodes.BadMethodInvalid;
             continue;
           }
 
           // check if method belongs to the object.
-          if ( !Object.ReferenceEquals( method.Parent, source ) )
+          if (!Object.ReferenceEquals(method.Parent, source))
           {
-            errors[ ii ] = StatusCodes.BadMethodInvalid;
+            errors[ii] = StatusCodes.BadMethodInvalid;
             continue;
           }
 
-          CallMethodResult result = results[ ii ] = new CallMethodResult();
+          CallMethodResult result = results[ii] = new CallMethodResult();
 
           // check if the node is ready for reading.
-          if ( source.ValidationRequired )
+          if (source.ValidationRequired)
           {
-            errors[ ii ] = StatusCodes.BadNodeIdUnknown;
+            errors[ii] = StatusCodes.BadNodeIdUnknown;
 
             // must validate node in a seperate operation.
             CallOperationState operation = new CallOperationState();
@@ -1817,46 +1817,46 @@ namespace CAS.UA.Server.Library.Base
             operation.Method = method;
             operation.Index = ii;
 
-            nodesToValidate.Add( operation );
+            nodesToValidate.Add(operation);
 
             continue;
           }
 
           // call the method.
-          errors[ ii ] = Call(
+          errors[ii] = Call(
               systemContext,
               methodToCall,
               source,
               method,
-              result );
+              result);
         }
 
         // check for nothing to do.
-        if ( nodesToValidate.Count == 0 )
+        if (nodesToValidate.Count == 0)
         {
           return;
         }
 
         // validates the nodes (reads values from the underlying data source if required).
-        for ( int ii = 0; ii < nodesToValidate.Count; ii++ )
+        for (int ii = 0; ii < nodesToValidate.Count; ii++)
         {
-          CallOperationState operation = nodesToValidate[ ii ];
+          CallOperationState operation = nodesToValidate[ii];
 
           // validate the object.
-          if ( !ValidateNode( systemContext, operation.Source ) )
+          if (!ValidateNode(systemContext, operation.Source))
           {
             continue;
           }
 
           // call the method.
-          CallMethodResult result = results[ operation.Index ];
+          CallMethodResult result = results[operation.Index];
 
-          errors[ operation.Index ] = Call(
+          errors[operation.Index] = Call(
               systemContext,
-              methodsToCall[ operation.Index ],
+              methodsToCall[operation.Index],
               operation.Source,
               operation.Method,
-              result );
+              result);
         }
       }
     }
@@ -1879,7 +1879,7 @@ namespace CAS.UA.Server.Library.Base
         CallMethodRequest methodToCall,
         NodeState source,
         MethodState method,
-        CallMethodResult result )
+        CallMethodResult result)
     {
       ServerSystemContext systemContext = context as ServerSystemContext;
       List<ServiceResult> argumentErrors = new List<ServiceResult>();
@@ -1889,9 +1889,9 @@ namespace CAS.UA.Server.Library.Base
           context,
           methodToCall.InputArguments,
           argumentErrors,
-          outputArguments );
+          outputArguments);
 
-      if ( ServiceResult.IsBad( error ) )
+      if (ServiceResult.IsBad(error))
       {
         return error;
       }
@@ -1899,41 +1899,41 @@ namespace CAS.UA.Server.Library.Base
       // check for argument errors.
       bool argumentsValid = true;
 
-      for ( int jj = 0; jj < argumentErrors.Count; jj++ )
+      for (int jj = 0; jj < argumentErrors.Count; jj++)
       {
-        ServiceResult argumentError = argumentErrors[ jj ];
+        ServiceResult argumentError = argumentErrors[jj];
 
-        if ( argumentError != null )
+        if (argumentError != null)
         {
-          result.InputArgumentResults.Add( argumentError.StatusCode );
+          result.InputArgumentResults.Add(argumentError.StatusCode);
 
-          if ( ServiceResult.IsBad( argumentError ) )
+          if (ServiceResult.IsBad(argumentError))
           {
             argumentsValid = false;
           }
         }
         else
         {
-          result.InputArgumentResults.Add( StatusCodes.Good );
+          result.InputArgumentResults.Add(StatusCodes.Good);
         }
 
         // only fill in diagnostic info if it is requested.
-        if ( ( systemContext.OperationContext.DiagnosticsMask & DiagnosticsMasks.OperationAll ) != 0 )
+        if ((systemContext.OperationContext.DiagnosticsMask & DiagnosticsMasks.OperationAll) != 0)
         {
-          if ( ServiceResult.IsBad( argumentError ) )
+          if (ServiceResult.IsBad(argumentError))
           {
             argumentsValid = false;
-            result.InputArgumentDiagnosticInfos.Add( new DiagnosticInfo( argumentError, systemContext.OperationContext.DiagnosticsMask, false, systemContext.OperationContext.StringTable ) );
+            result.InputArgumentDiagnosticInfos.Add(new DiagnosticInfo(argumentError, systemContext.OperationContext.DiagnosticsMask, false, systemContext.OperationContext.StringTable));
           }
           else
           {
-            result.InputArgumentDiagnosticInfos.Add( null );
+            result.InputArgumentDiagnosticInfos.Add(null);
           }
         }
       }
 
       // check for validation errors.
-      if ( !argumentsValid )
+      if (!argumentsValid)
       {
         result.StatusCode = StatusCodes.BadInvalidArgument;
         return result.StatusCode;
@@ -1961,17 +1961,17 @@ namespace CAS.UA.Server.Library.Base
         object sourceId,
         uint subscriptionId,
         IEventMonitoredItem monitoredItem,
-        bool unsubscribe )
+        bool unsubscribe)
     {
-      ServerSystemContext systemContext = m_systemContext.Copy( context );
+      ServerSystemContext systemContext = m_systemContext.Copy(context);
       IDictionary<NodeId, NodeState> operationCache = new NodeIdDictionary<NodeState>();
 
-      lock ( Lock )
+      lock (Lock)
       {
         // check for valid handle.
-        NodeState source = IsHandleInNamespace( sourceId );
+        NodeState source = IsHandleInNamespace(sourceId);
 
-        if ( source == null )
+        if (source == null)
         {
           return StatusCodes.BadNodeIdInvalid;
         }
@@ -1979,7 +1979,7 @@ namespace CAS.UA.Server.Library.Base
         // check if the object supports subscritions.
         BaseObjectState instance = sourceId as BaseObjectState;
 
-        if ( instance == null || instance.EventNotifier != EventNotifiers.SubscribeToEvents )
+        if (instance == null || instance.EventNotifier != EventNotifiers.SubscribeToEvents)
         {
           return StatusCodes.BadNotSupported;
         }
@@ -1987,29 +1987,29 @@ namespace CAS.UA.Server.Library.Base
         MonitoredNode monitoredNode = instance.Handle as MonitoredNode;
 
         // handle unsubscribe.
-        if ( unsubscribe )
+        if (unsubscribe)
         {
-          if ( monitoredNode != null )
+          if (monitoredNode != null)
           {
-            monitoredNode.UnsubscribeToEvents( systemContext, monitoredItem );
+            monitoredNode.UnsubscribeToEvents(systemContext, monitoredItem);
 
             // do any post processing.
-            OnUnsubscribeToEvents( systemContext, monitoredNode, monitoredItem );
+            OnUnsubscribeToEvents(systemContext, monitoredNode, monitoredItem);
           }
 
           return ServiceResult.Good;
         }
 
         // subscribe to events.
-        if ( monitoredNode == null )
+        if (monitoredNode == null)
         {
-          instance.Handle = monitoredNode = new MonitoredNode( m_server, this, source );
+          instance.Handle = monitoredNode = new MonitoredNode(m_server, this, source);
         }
 
-        monitoredNode.SubscribeToEvents( systemContext, monitoredItem );
+        monitoredNode.SubscribeToEvents(systemContext, monitoredItem);
 
         // do any post processing.
-        OnSubscribeToEvents( systemContext, monitoredNode, monitoredItem );
+        OnSubscribeToEvents(systemContext, monitoredNode, monitoredItem);
 
         return ServiceResult.Good;
       }
@@ -2026,21 +2026,21 @@ namespace CAS.UA.Server.Library.Base
         OperationContext context,
         uint subscriptionId,
         IEventMonitoredItem monitoredItem,
-        bool unsubscribe )
+        bool unsubscribe)
     {
-      ServerSystemContext systemContext = m_systemContext.Copy( context );
+      ServerSystemContext systemContext = m_systemContext.Copy(context);
       IDictionary<NodeId, NodeState> operationCache = new NodeIdDictionary<NodeState>();
 
-      lock ( Lock )
+      lock (Lock)
       {
         // update root notifiers.
-        for ( int ii = 0; ii < m_rootNotifiers.Count; ii++ )
+        for (int ii = 0; ii < m_rootNotifiers.Count; ii++)
         {
           SubscribeToAllEvents(
               systemContext,
               monitoredItem,
               unsubscribe,
-              m_rootNotifiers[ ii ] );
+              m_rootNotifiers[ii]);
         }
 
         return ServiceResult.Good;
@@ -2054,34 +2054,34 @@ namespace CAS.UA.Server.Library.Base
         ISystemContext systemContext,
         IEventMonitoredItem monitoredItem,
         bool unsubscribe,
-        NodeState source )
+        NodeState source)
     {
       MonitoredNode monitoredNode = source.Handle as MonitoredNode;
 
       // handle unsubscribe.
-      if ( unsubscribe )
+      if (unsubscribe)
       {
-        if ( monitoredNode != null )
+        if (monitoredNode != null)
         {
-          monitoredNode.UnsubscribeToEvents( systemContext, monitoredItem );
+          monitoredNode.UnsubscribeToEvents(systemContext, monitoredItem);
 
           // do any post processing.
-          OnUnsubscribeToEvents( systemContext, monitoredNode, monitoredItem );
+          OnUnsubscribeToEvents(systemContext, monitoredNode, monitoredItem);
         }
 
         return;
       }
 
       // subscribe to events.
-      if ( monitoredNode == null )
+      if (monitoredNode == null)
       {
-        source.Handle = monitoredNode = new MonitoredNode( m_server, this, source );
+        source.Handle = monitoredNode = new MonitoredNode(m_server, this, source);
       }
 
-      monitoredNode.SubscribeToEvents( systemContext, monitoredItem );
+      monitoredNode.SubscribeToEvents(systemContext, monitoredItem);
 
       // do any post processing.
-      OnSubscribeToEvents( systemContext, monitoredNode, monitoredItem );
+      OnSubscribeToEvents(systemContext, monitoredNode, monitoredItem);
     }
 
     /// <summary>
@@ -2090,7 +2090,7 @@ namespace CAS.UA.Server.Library.Base
     protected virtual void OnSubscribeToEvents(
         ISystemContext systemContext,
         MonitoredNode monitoredNode,
-        IEventMonitoredItem monitoredItem )
+        IEventMonitoredItem monitoredItem)
     {
       // does nothing.
     }
@@ -2101,7 +2101,7 @@ namespace CAS.UA.Server.Library.Base
     protected virtual void OnUnsubscribeToEvents(
         ISystemContext systemContext,
         MonitoredNode monitoredNode,
-        IEventMonitoredItem monitoredItem )
+        IEventMonitoredItem monitoredItem)
     {
       // does nothing.
     }
@@ -2115,55 +2115,55 @@ namespace CAS.UA.Server.Library.Base
     /// </remarks>
     public virtual ServiceResult ConditionRefresh(
         OperationContext context,
-        IList<IEventMonitoredItem> monitoredItems )
+        IList<IEventMonitoredItem> monitoredItems)
     {
-      ServerSystemContext systemContext = m_systemContext.Copy( context );
+      ServerSystemContext systemContext = m_systemContext.Copy(context);
 
-      lock ( Lock )
+      lock (Lock)
       {
-        for ( int ii = 0; ii < monitoredItems.Count; ii++ )
+        for (int ii = 0; ii < monitoredItems.Count; ii++)
         {
-          IEventMonitoredItem monitoredItem = monitoredItems[ ii ];
+          IEventMonitoredItem monitoredItem = monitoredItems[ii];
 
-          if ( monitoredItem == null )
+          if (monitoredItem == null)
           {
             continue;
           }
 
           // check for global subscription.
-          if ( monitoredItem.MonitoringAllEvents )
+          if (monitoredItem.MonitoringAllEvents)
           {
-            for ( int jj = 0; jj < m_rootNotifiers.Count; jj++ )
+            for (int jj = 0; jj < m_rootNotifiers.Count; jj++)
             {
-              MonitoredNode monitoredNode = m_rootNotifiers[ jj ].Handle as MonitoredNode;
+              MonitoredNode monitoredNode = m_rootNotifiers[jj].Handle as MonitoredNode;
 
-              if ( monitoredNode == null )
+              if (monitoredNode == null)
               {
                 continue;
               }
 
-              monitoredNode.ConditionRefresh( systemContext, monitoredItem );
+              monitoredNode.ConditionRefresh(systemContext, monitoredItem);
             }
           }
 
           // check for subscription to local node.
           else
           {
-            NodeState source = IsHandleInNamespace( monitoredItem.ManagerHandle );
+            NodeState source = IsHandleInNamespace(monitoredItem.ManagerHandle);
 
-            if ( source == null )
+            if (source == null)
             {
               continue;
             }
 
             MonitoredNode monitoredNode = source.Handle as MonitoredNode;
 
-            if ( monitoredNode == null )
+            if (monitoredNode == null)
             {
               continue;
             }
 
-            monitoredNode.ConditionRefresh( systemContext, monitoredItem );
+            monitoredNode.ConditionRefresh(systemContext, monitoredItem);
           }
         }
       }
@@ -2186,20 +2186,20 @@ namespace CAS.UA.Server.Library.Base
         IList<ServiceResult> errors,
         IList<MonitoringFilterResult> filterErrors,
         IList<IMonitoredItem> monitoredItems,
-        ref long globalIdCounter )
+        ref long globalIdCounter)
     {
-      ServerSystemContext systemContext = m_systemContext.Copy( context );
+      ServerSystemContext systemContext = m_systemContext.Copy(context);
       IDictionary<NodeId, NodeState> operationCache = new NodeIdDictionary<NodeState>();
       List<ReadWriteOperationState> nodesToValidate = new List<ReadWriteOperationState>();
 
-      lock ( Lock )
+      lock (Lock)
       {
-        for ( int ii = 0; ii < itemsToCreate.Count; ii++ )
+        for (int ii = 0; ii < itemsToCreate.Count; ii++)
         {
-          MonitoredItemCreateRequest itemToCreate = itemsToCreate[ ii ];
+          MonitoredItemCreateRequest itemToCreate = itemsToCreate[ii];
 
           // skip items that have already been processed.
-          if ( itemToCreate.Processed )
+          if (itemToCreate.Processed)
           {
             continue;
           }
@@ -2207,9 +2207,9 @@ namespace CAS.UA.Server.Library.Base
           ReadValueId itemToMonitor = itemToCreate.ItemToMonitor;
 
           // check for valid handle.
-          NodeState source = GetManagerHandle( systemContext, itemToMonitor.NodeId, operationCache ) as NodeState;
+          NodeState source = GetManagerHandle(systemContext, itemToMonitor.NodeId, operationCache) as NodeState;
 
-          if ( source == null )
+          if (source == null)
           {
             continue;
           }
@@ -2218,9 +2218,9 @@ namespace CAS.UA.Server.Library.Base
           itemToCreate.Processed = true;
 
           // check if the node is ready for reading.
-          if ( source.ValidationRequired )
+          if (source.ValidationRequired)
           {
-            errors[ ii ] = StatusCodes.BadNodeIdUnknown;
+            errors[ii] = StatusCodes.BadNodeIdUnknown;
 
             // must validate node in a seperate operation.
             ReadWriteOperationState operation = new ReadWriteOperationState();
@@ -2228,7 +2228,7 @@ namespace CAS.UA.Server.Library.Base
             operation.Source = source;
             operation.Index = ii;
 
-            nodesToValidate.Add( operation );
+            nodesToValidate.Add(operation);
 
             continue;
           }
@@ -2236,7 +2236,7 @@ namespace CAS.UA.Server.Library.Base
           MonitoringFilterResult filterError = null;
           IMonitoredItem monitoredItem = null;
 
-          errors[ ii ] = CreateMonitoredItem(
+          errors[ii] = CreateMonitoredItem(
               systemContext,
               source,
               subscriptionId,
@@ -2246,43 +2246,43 @@ namespace CAS.UA.Server.Library.Base
               itemToCreate,
               ref globalIdCounter,
               out filterError,
-              out monitoredItem );
+              out monitoredItem);
 
           // save any filter error details.
-          filterErrors[ ii ] = filterError;
+          filterErrors[ii] = filterError;
 
-          if ( ServiceResult.IsBad( errors[ ii ] ) )
+          if (ServiceResult.IsBad(errors[ii]))
           {
             continue;
           }
 
           // save the monitored item.
-          monitoredItems[ ii ] = monitoredItem;
+          monitoredItems[ii] = monitoredItem;
         }
 
         // check for nothing to do.
-        if ( nodesToValidate.Count == 0 )
+        if (nodesToValidate.Count == 0)
         {
           return;
         }
 
         // validates the nodes (reads values from the underlying data source if required).
-        for ( int ii = 0; ii < nodesToValidate.Count; ii++ )
+        for (int ii = 0; ii < nodesToValidate.Count; ii++)
         {
-          ReadWriteOperationState operation = nodesToValidate[ ii ];
+          ReadWriteOperationState operation = nodesToValidate[ii];
 
           // validate the object.
-          if ( !ValidateNode( systemContext, operation.Source ) )
+          if (!ValidateNode(systemContext, operation.Source))
           {
             continue;
           }
 
-          MonitoredItemCreateRequest itemToCreate = itemsToCreate[ operation.Index ];
+          MonitoredItemCreateRequest itemToCreate = itemsToCreate[operation.Index];
 
           MonitoringFilterResult filterError = null;
           IMonitoredItem monitoredItem = null;
 
-          errors[ operation.Index ] = CreateMonitoredItem(
+          errors[operation.Index] = CreateMonitoredItem(
               systemContext,
               operation.Source,
               subscriptionId,
@@ -2292,18 +2292,18 @@ namespace CAS.UA.Server.Library.Base
               itemToCreate,
               ref globalIdCounter,
               out filterError,
-              out monitoredItem );
+              out monitoredItem);
 
           // save any filter error details.
-          filterErrors[ operation.Index ] = filterError;
+          filterErrors[operation.Index] = filterError;
 
-          if ( ServiceResult.IsBad( errors[ operation.Index ] ) )
+          if (ServiceResult.IsBad(errors[operation.Index]))
           {
             continue;
           }
 
           // save the monitored item.
-          monitoredItems[ operation.Index ] = monitoredItem;
+          monitoredItems[operation.Index] = monitoredItem;
         }
       }
     }
@@ -2324,7 +2324,7 @@ namespace CAS.UA.Server.Library.Base
         uint attributeId,
         ExtensionObject requestedFilter,
         out DataChangeFilter filter,
-        out Range range )
+        out Range range)
     {
       filter = null;
       range = null;
@@ -2332,13 +2332,13 @@ namespace CAS.UA.Server.Library.Base
       // check for valid filter type.
       filter = requestedFilter.Body as DataChangeFilter;
 
-      if ( filter == null )
+      if (filter == null)
       {
         return StatusCodes.BadMonitoredItemFilterUnsupported;
       }
 
       // only supported for value attributes.
-      if ( attributeId != Attributes.Value )
+      if (attributeId != Attributes.Value)
       {
         return StatusCodes.BadMonitoredItemFilterUnsupported;
       }
@@ -2346,15 +2346,15 @@ namespace CAS.UA.Server.Library.Base
       // only supported for variables.
       BaseVariableState variable = source as BaseVariableState;
 
-      if ( variable == null )
+      if (variable == null)
       {
         return StatusCodes.BadMonitoredItemFilterUnsupported;
       }
 
       // check the datatype.
-      BuiltInType builtInType = TypeInfo.GetBuiltInType( variable.DataType, Server.TypeTree );
+      BuiltInType builtInType = Opc.Ua.TypeInfo.GetBuiltInType(variable.DataType, Server.TypeTree);
 
-      if ( !TypeInfo.IsNumericType( builtInType ) )
+      if (!Opc.Ua.TypeInfo.IsNumericType(builtInType))
       {
         return StatusCodes.BadMonitoredItemFilterUnsupported;
       }
@@ -2362,23 +2362,23 @@ namespace CAS.UA.Server.Library.Base
       // validate filter.
       ServiceResult error = filter.Validate();
 
-      if ( ServiceResult.IsBad( error ) )
+      if (ServiceResult.IsBad(error))
       {
         return error;
       }
 
-      if ( filter.DeadbandType == (uint)DeadbandType.Percent )
+      if (filter.DeadbandType == (uint)DeadbandType.Percent)
       {
-        BaseVariableState euRange = variable.FindChild( context, BrowseNames.EURange ) as BaseVariableState;
+        BaseVariableState euRange = variable.FindChild(context, BrowseNames.EURange) as BaseVariableState;
 
-        if ( euRange == null )
+        if (euRange == null)
         {
           return StatusCodes.BadMonitoredItemFilterUnsupported;
         }
 
         range = euRange.Value as Range;
 
-        if ( range == null )
+        if (range == null)
         {
           return StatusCodes.BadMonitoredItemFilterUnsupported;
         }
@@ -2404,7 +2404,7 @@ namespace CAS.UA.Server.Library.Base
         MonitoredItemCreateRequest itemToCreate,
         ref long globalIdCounter,
         out MonitoringFilterResult filterError,
-        out IMonitoredItem monitoredItem )
+        out IMonitoredItem monitoredItem)
     {
       filterError = null;
       monitoredItem = null;
@@ -2423,18 +2423,18 @@ namespace CAS.UA.Server.Library.Base
           itemToCreate.ItemToMonitor.AttributeId,
           itemToCreate.ItemToMonitor.ParsedIndexRange,
           itemToCreate.ItemToMonitor.DataEncoding,
-          initialValue );
+          initialValue);
 
-            if (ServiceResult.IsBad(error))
-            {
-                if (error.StatusCode == StatusCodes.BadAttributeIdInvalid)
-                {
-                    return error;
-                }
+      if (ServiceResult.IsBad(error))
+      {
+        if (error.StatusCode == StatusCodes.BadAttributeIdInvalid)
+        {
+          return error;
+        }
 
-                initialValue.StatusCode = error.StatusCode;
-                error = ServiceResult.Good;
-            }
+        initialValue.StatusCode = error.StatusCode;
+        error = ServiceResult.Good;
+      }
       // validate parameters.
       MonitoringParameters parameters = itemToCreate.RequestedParameters;
 
@@ -2442,7 +2442,7 @@ namespace CAS.UA.Server.Library.Base
       DataChangeFilter filter = null;
       Range range = null;
 
-      if ( !ExtensionObject.IsNull( parameters.Filter ) )
+      if (!ExtensionObject.IsNull(parameters.Filter))
       {
         error = ValidateDataChangeFilter(
             context,
@@ -2450,9 +2450,9 @@ namespace CAS.UA.Server.Library.Base
             itemToCreate.ItemToMonitor.AttributeId,
             parameters.Filter,
             out filter,
-            out range );
+            out range);
 
-        if ( ServiceResult.IsBad( error ) )
+        if (ServiceResult.IsBad(error))
         {
           return error;
         }
@@ -2461,18 +2461,18 @@ namespace CAS.UA.Server.Library.Base
       // create monitored node.
       MonitoredNode monitoredNode = source.Handle as MonitoredNode;
 
-      if ( monitoredNode == null )
+      if (monitoredNode == null)
       {
-        source.Handle = monitoredNode = new MonitoredNode( m_server, this, source );
+        source.Handle = monitoredNode = new MonitoredNode(m_server, this, source);
       }
 
       // create a globally unique identifier.
-      uint monitoredItemId = Utils.IncrementIdentifier( ref globalIdCounter );
+      uint monitoredItemId = Utils.IncrementIdentifier(ref globalIdCounter);
 
       // determine the sampling interval.
       double samplingInterval = itemToCreate.RequestedParameters.SamplingInterval;
 
-      if ( samplingInterval < 0 )
+      if (samplingInterval < 0)
       {
         samplingInterval = publishingInterval;
       }
@@ -2480,13 +2480,13 @@ namespace CAS.UA.Server.Library.Base
       // check if the variable needs to be sampled.
       bool samplingRequired = false;
 
-      if ( itemToCreate.ItemToMonitor.AttributeId == Attributes.Value )
+      if (itemToCreate.ItemToMonitor.AttributeId == Attributes.Value)
       {
         BaseVariableState variable = source as BaseVariableState;
 
-        if ( variable.MinimumSamplingInterval > 0 )
+        if (variable.MinimumSamplingInterval > 0)
         {
-          samplingInterval = CalculateSamplingInterval( variable, samplingInterval );
+          samplingInterval = CalculateSamplingInterval(variable, samplingInterval);
           samplingRequired = true;
         }
       }
@@ -2507,18 +2507,18 @@ namespace CAS.UA.Server.Library.Base
           itemToCreate.RequestedParameters.DiscardOldest,
           filter,
           range,
-          false );
+          false);
 
-      if ( samplingRequired )
+      if (samplingRequired)
       {
-        CreateSampledItem( samplingInterval, datachangeItem );
+        CreateSampledItem(samplingInterval, datachangeItem);
       }
 
       // report the initial value.
-      datachangeItem.QueueValue( initialValue, null );
+      datachangeItem.QueueValue(initialValue, null);
 
       // do any post processing.
-      OnCreateMonitoredItem( context, itemToCreate, monitoredNode, datachangeItem );
+      OnCreateMonitoredItem(context, itemToCreate, monitoredNode, datachangeItem);
 
       // update monitored item list.
       monitoredItem = datachangeItem;
@@ -2529,16 +2529,16 @@ namespace CAS.UA.Server.Library.Base
     /// <summary>
     /// Calculates the sampling interval.
     /// </summary>
-    private double CalculateSamplingInterval( BaseVariableState variable, double samplingInterval )
+    private double CalculateSamplingInterval(BaseVariableState variable, double samplingInterval)
     {
-      if ( samplingInterval < variable.MinimumSamplingInterval )
+      if (samplingInterval < variable.MinimumSamplingInterval)
       {
         samplingInterval = variable.MinimumSamplingInterval;
       }
 
-      if ( ( samplingInterval % m_minimumSamplingInterval ) != 0 )
+      if ((samplingInterval % m_minimumSamplingInterval) != 0)
       {
-        samplingInterval = Math.Truncate( samplingInterval / m_minimumSamplingInterval );
+        samplingInterval = Math.Truncate(samplingInterval / m_minimumSamplingInterval);
         samplingInterval += 1;
         samplingInterval *= m_minimumSamplingInterval;
       }
@@ -2549,33 +2549,33 @@ namespace CAS.UA.Server.Library.Base
     /// <summary>
     /// Creates a new sampled item.
     /// </summary>
-    private void CreateSampledItem( double samplingInterval, DataChangeMonitoredItem monitoredItem )
+    private void CreateSampledItem(double samplingInterval, DataChangeMonitoredItem monitoredItem)
     {
-      m_sampledItems.Add( monitoredItem );
+      m_sampledItems.Add(monitoredItem);
 
-      if ( m_samplingTimer == null )
+      if (m_samplingTimer == null)
       {
-        m_samplingTimer = new Timer( DoSample, null, (int)m_minimumSamplingInterval, (int)m_minimumSamplingInterval );
+        m_samplingTimer = new Timer(DoSample, null, (int)m_minimumSamplingInterval, (int)m_minimumSamplingInterval);
       }
     }
 
     /// <summary>
     /// Deletes a sampled item.
     /// </summary>
-    private void DeleteSampledItem( DataChangeMonitoredItem monitoredItem )
+    private void DeleteSampledItem(DataChangeMonitoredItem monitoredItem)
     {
-      for ( int ii = 0; ii < m_sampledItems.Count; ii++ )
+      for (int ii = 0; ii < m_sampledItems.Count; ii++)
       {
-        if ( Object.ReferenceEquals( monitoredItem, m_sampledItems[ ii ] ) )
+        if (Object.ReferenceEquals(monitoredItem, m_sampledItems[ii]))
         {
-          m_sampledItems.RemoveAt( ii );
+          m_sampledItems.RemoveAt(ii);
           break;
         }
       }
 
-      if ( m_sampledItems.Count == 0 )
+      if (m_sampledItems.Count == 0)
       {
-        if ( m_samplingTimer != null )
+        if (m_samplingTimer != null)
         {
           m_samplingTimer.Dispose();
           m_samplingTimer = null;
@@ -2586,26 +2586,26 @@ namespace CAS.UA.Server.Library.Base
     /// <summary>
     /// Polls each monitored item which requires sample. 
     /// </summary>
-    private void DoSample( object state )
+    private void DoSample(object state)
     {
       try
       {
-        lock ( m_lock )
+        lock (m_lock)
         {
-          for ( int ii = 0; ii < m_sampledItems.Count; ii++ )
+          for (int ii = 0; ii < m_sampledItems.Count; ii++)
           {
-            DataChangeMonitoredItem monitoredItem = m_sampledItems[ ii ];
+            DataChangeMonitoredItem monitoredItem = m_sampledItems[ii];
 
-            if ( monitoredItem.TimeToNextSample < m_minimumSamplingInterval )
+            if (monitoredItem.TimeToNextSample < m_minimumSamplingInterval)
             {
-              monitoredItem.ValueChanged( SystemContext );
+              monitoredItem.ValueChanged(SystemContext);
             }
           }
         }
       }
-      catch ( Exception e )
+      catch (Exception e)
       {
-        Utils.Trace( e, "Unexpected error during diagnostics scan." );
+        Utils.Trace(e, "Unexpected error during diagnostics scan.");
       }
     }
 
@@ -2616,7 +2616,7 @@ namespace CAS.UA.Server.Library.Base
         ISystemContext systemContext,
         MonitoredItemCreateRequest itemToCreate,
         MonitoredNode monitoredNode,
-        DataChangeMonitoredItem monitoredItem )
+        DataChangeMonitoredItem monitoredItem)
     {
       // does nothing.
     }
@@ -2630,18 +2630,18 @@ namespace CAS.UA.Server.Library.Base
         IList<IMonitoredItem> monitoredItems,
         IList<MonitoredItemModifyRequest> itemsToModify,
         IList<ServiceResult> errors,
-        IList<MonitoringFilterResult> filterErrors )
+        IList<MonitoringFilterResult> filterErrors)
     {
-      ServerSystemContext systemContext = m_systemContext.Copy( context );
+      ServerSystemContext systemContext = m_systemContext.Copy(context);
 
-      lock ( Lock )
+      lock (Lock)
       {
-        for ( int ii = 0; ii < monitoredItems.Count; ii++ )
+        for (int ii = 0; ii < monitoredItems.Count; ii++)
         {
-          MonitoredItemModifyRequest itemToModify = itemsToModify[ ii ];
+          MonitoredItemModifyRequest itemToModify = itemsToModify[ii];
 
           // skip items that have already been processed.
-          if ( itemToModify.Processed )
+          if (itemToModify.Processed)
           {
             continue;
           }
@@ -2649,16 +2649,16 @@ namespace CAS.UA.Server.Library.Base
           // modify the monitored item.
           MonitoringFilterResult filterError = null;
 
-          errors[ ii ] = ModifyMonitoredItem(
+          errors[ii] = ModifyMonitoredItem(
               systemContext,
               context.DiagnosticsMask,
               timestampsToReturn,
-              monitoredItems[ ii ],
+              monitoredItems[ii],
               itemToModify,
-              out filterError );
+              out filterError);
 
           // save any filter error details.
-          filterErrors[ ii ] = filterError;
+          filterErrors[ii] = filterError;
         }
       }
     }
@@ -2672,7 +2672,7 @@ namespace CAS.UA.Server.Library.Base
         TimestampsToReturn timestampsToReturn,
         IMonitoredItem monitoredItem,
         MonitoredItemModifyRequest itemToModify,
-        out MonitoringFilterResult filterError )
+        out MonitoringFilterResult filterError)
     {
       filterError = null;
       ServiceResult error = null;
@@ -2680,12 +2680,12 @@ namespace CAS.UA.Server.Library.Base
       // check for valid handle.
       MonitoredNode monitoredNode = monitoredItem.ManagerHandle as MonitoredNode;
 
-      if ( monitoredNode == null )
+      if (monitoredNode == null)
       {
         return ServiceResult.Good;
       }
 
-      if ( IsHandleInNamespace( monitoredNode.Node ) == null )
+      if (IsHandleInNamespace(monitoredNode.Node) == null)
       {
         return ServiceResult.Good;
       }
@@ -2703,7 +2703,7 @@ namespace CAS.UA.Server.Library.Base
       DataChangeFilter filter = null;
       Range range = null;
 
-      if ( !ExtensionObject.IsNull( parameters.Filter ) )
+      if (!ExtensionObject.IsNull(parameters.Filter))
       {
         error = ValidateDataChangeFilter(
             context,
@@ -2711,9 +2711,9 @@ namespace CAS.UA.Server.Library.Base
             datachangeItem.AttributeId,
             parameters.Filter,
             out filter,
-            out range );
+            out range);
 
-        if ( ServiceResult.IsBad( error ) )
+        if (ServiceResult.IsBad(error))
         {
           return error;
         }
@@ -2724,13 +2724,13 @@ namespace CAS.UA.Server.Library.Base
       // check if the variable needs to be sampled.
       double samplingInterval = itemToModify.RequestedParameters.SamplingInterval;
 
-      if ( datachangeItem.AttributeId == Attributes.Value )
+      if (datachangeItem.AttributeId == Attributes.Value)
       {
         BaseVariableState variable = monitoredNode.Node as BaseVariableState;
 
-        if ( variable.MinimumSamplingInterval > 0 )
+        if (variable.MinimumSamplingInterval > 0)
         {
-          samplingInterval = CalculateSamplingInterval( variable, samplingInterval );
+          samplingInterval = CalculateSamplingInterval(variable, samplingInterval);
         }
       }
 
@@ -2743,7 +2743,7 @@ namespace CAS.UA.Server.Library.Base
           itemToModify.RequestedParameters.QueueSize,
           itemToModify.RequestedParameters.DiscardOldest,
           filter,
-          range );
+          range);
 
       // do any post processing.
       OnModifyMonitoredItem(
@@ -2751,7 +2751,7 @@ namespace CAS.UA.Server.Library.Base
           itemToModify,
           monitoredNode,
           datachangeItem,
-          previousSamplingInterval );
+          previousSamplingInterval);
 
       return ServiceResult.Good;
     }
@@ -2764,7 +2764,7 @@ namespace CAS.UA.Server.Library.Base
         MonitoredItemModifyRequest itemToModify,
         MonitoredNode monitoredNode,
         DataChangeMonitoredItem monitoredItem,
-        double previousSamplingInterval )
+        double previousSamplingInterval)
     {
       // does nothing.
     }
@@ -2776,16 +2776,16 @@ namespace CAS.UA.Server.Library.Base
         OperationContext context,
         IList<IMonitoredItem> monitoredItems,
         IList<bool> processedItems,
-        IList<ServiceResult> errors )
+        IList<ServiceResult> errors)
     {
-      ServerSystemContext systemContext = m_systemContext.Copy( context );
+      ServerSystemContext systemContext = m_systemContext.Copy(context);
 
-      lock ( Lock )
+      lock (Lock)
       {
-        for ( int ii = 0; ii < monitoredItems.Count; ii++ )
+        for (int ii = 0; ii < monitoredItems.Count; ii++)
         {
           // skip items that have already been processed.
-          if ( processedItems[ ii ] )
+          if (processedItems[ii])
           {
             continue;
           }
@@ -2793,13 +2793,13 @@ namespace CAS.UA.Server.Library.Base
           // delete the monitored item.
           bool processed = false;
 
-          errors[ ii ] = DeleteMonitoredItem(
+          errors[ii] = DeleteMonitoredItem(
               systemContext,
-              monitoredItems[ ii ],
-              out processed );
+              monitoredItems[ii],
+              out processed);
 
           // indicate whether it was processed or not.
-          processedItems[ ii ] = processed;
+          processedItems[ii] = processed;
         }
       }
     }
@@ -2810,19 +2810,19 @@ namespace CAS.UA.Server.Library.Base
     protected virtual ServiceResult DeleteMonitoredItem(
         ISystemContext context,
         IMonitoredItem monitoredItem,
-        out bool processed )
+        out bool processed)
     {
       processed = false;
 
       // check for valid handle.
       MonitoredNode monitoredNode = monitoredItem.ManagerHandle as MonitoredNode;
 
-      if ( monitoredNode == null )
+      if (monitoredNode == null)
       {
         return ServiceResult.Good;
       }
 
-      if ( IsHandleInNamespace( monitoredNode.Node ) == null )
+      if (IsHandleInNamespace(monitoredNode.Node) == null)
       {
         return ServiceResult.Good;
       }
@@ -2837,21 +2837,21 @@ namespace CAS.UA.Server.Library.Base
       DataChangeMonitoredItem datachangeItem = monitoredItem as DataChangeMonitoredItem;
 
       // check if the variable needs to be sampled.
-      if ( datachangeItem.AttributeId == Attributes.Value )
+      if (datachangeItem.AttributeId == Attributes.Value)
       {
         BaseVariableState variable = monitoredNode.Node as BaseVariableState;
 
-        if ( variable.MinimumSamplingInterval > 0 )
+        if (variable.MinimumSamplingInterval > 0)
         {
-          DeleteSampledItem( datachangeItem );
+          DeleteSampledItem(datachangeItem);
         }
       }
 
       // remove item.
-      monitoredNode.DeleteItem( datachangeItem );
+      monitoredNode.DeleteItem(datachangeItem);
 
       // do any post processing.
-      OnDeleteMonitoredItem( context, monitoredNode, datachangeItem );
+      OnDeleteMonitoredItem(context, monitoredNode, datachangeItem);
 
       return ServiceResult.Good;
     }
@@ -2862,7 +2862,7 @@ namespace CAS.UA.Server.Library.Base
     protected virtual void OnDeleteMonitoredItem(
         ISystemContext systemContext,
         MonitoredNode monitoredNode,
-        DataChangeMonitoredItem monitoredItem )
+        DataChangeMonitoredItem monitoredItem)
     {
       // does nothing.
     }
@@ -2875,16 +2875,16 @@ namespace CAS.UA.Server.Library.Base
         MonitoringMode monitoringMode,
         IList<IMonitoredItem> monitoredItems,
         IList<bool> processedItems,
-        IList<ServiceResult> errors )
+        IList<ServiceResult> errors)
     {
-      ServerSystemContext systemContext = m_systemContext.Copy( context );
+      ServerSystemContext systemContext = m_systemContext.Copy(context);
 
-      lock ( Lock )
+      lock (Lock)
       {
-        for ( int ii = 0; ii < monitoredItems.Count; ii++ )
+        for (int ii = 0; ii < monitoredItems.Count; ii++)
         {
           // skip items that have already been processed.
-          if ( processedItems[ ii ] )
+          if (processedItems[ii])
           {
             continue;
           }
@@ -2892,14 +2892,14 @@ namespace CAS.UA.Server.Library.Base
           // update monitoring mode.
           bool processed = false;
 
-          errors[ ii ] = SetMonitoringMode(
+          errors[ii] = SetMonitoringMode(
               systemContext,
-              monitoredItems[ ii ],
+              monitoredItems[ii],
               monitoringMode,
-              out processed );
+              out processed);
 
           // indicate whether it was processed or not.
-          processedItems[ ii ] = processed;
+          processedItems[ii] = processed;
         }
       }
     }
@@ -2911,19 +2911,19 @@ namespace CAS.UA.Server.Library.Base
         ISystemContext context,
         IMonitoredItem monitoredItem,
         MonitoringMode monitoringMode,
-        out bool processed )
+        out bool processed)
     {
       processed = false;
 
       // check for valid handle.
       MonitoredNode monitoredNode = monitoredItem.ManagerHandle as MonitoredNode;
 
-      if ( monitoredNode == null )
+      if (monitoredNode == null)
       {
         return ServiceResult.Good;
       }
 
-      if ( IsHandleInNamespace( monitoredNode.Node ) == null )
+      if (IsHandleInNamespace(monitoredNode.Node) == null)
       {
         return ServiceResult.Good;
       }
@@ -2935,10 +2935,10 @@ namespace CAS.UA.Server.Library.Base
       DataChangeMonitoredItem datachangeItem = monitoredItem as DataChangeMonitoredItem;
 
       // update monitoring mode.
-      MonitoringMode previousMode = datachangeItem.SetMonitoringMode( monitoringMode );
+      MonitoringMode previousMode = datachangeItem.SetMonitoringMode(monitoringMode);
 
       // need to provide an immediate update after enabling.
-      if ( previousMode == MonitoringMode.Disabled && monitoringMode != MonitoringMode.Disabled )
+      if (previousMode == MonitoringMode.Disabled && monitoringMode != MonitoringMode.Disabled)
       {
         DataValue initialValue = new DataValue();
 
@@ -2952,13 +2952,13 @@ namespace CAS.UA.Server.Library.Base
             datachangeItem.AttributeId,
             datachangeItem.IndexRange,
             datachangeItem.DataEncoding,
-            initialValue );
+            initialValue);
 
-        datachangeItem.QueueValue( initialValue, error );
+        datachangeItem.QueueValue(initialValue, error);
       }
 
       // do any post processing.
-      OnSetMonitoringMode( context, monitoredNode, datachangeItem, previousMode, monitoringMode );
+      OnSetMonitoringMode(context, monitoredNode, datachangeItem, previousMode, monitoringMode);
 
       return ServiceResult.Good;
     }
@@ -2971,7 +2971,7 @@ namespace CAS.UA.Server.Library.Base
         MonitoredNode monitoredNode,
         DataChangeMonitoredItem monitoredItem,
         MonitoringMode previousMode,
-        MonitoringMode currentMode )
+        MonitoringMode currentMode)
     {
       // does nothing.
     }

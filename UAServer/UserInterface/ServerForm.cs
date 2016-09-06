@@ -13,19 +13,18 @@
 //  http://www.cas.eu
 //</summary>
 
+using CAS.Lib.CodeProtect;
+using CAS.Lib.CodeProtect.Controls;
+using CAS.Lib.ControlLibrary;
+using CAS.Lib.RTLib.Processes;
+using CAS.UA.Server.Properties;
+using Opc.Ua;
+using Opc.Ua.Server;
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Reflection;
 using System.Windows.Forms;
-using CAS.Lib.CodeProtect;
-using CAS.Lib.ControlLibrary;
-using CAS.Lib.RTLib.Processes;
-using CAS.UA.Server.Properties;
-using Opc.Ua;
-using Opc.Ua.Client.Controls;
-using Opc.Ua.Server;
-using CAS.Lib.CodeProtect.Controls;
 
 namespace CAS.UA.Server.UserInterface
 {
@@ -44,7 +43,7 @@ namespace CAS.UA.Server.UserInterface
       m_application = application;
       m_server = server;
       this.ServerDiagnosticsCTRL.Initialize(m_server, configuration);
-      GuiUtils.DisplayUaTcpImplementation(this, configuration);
+      ApplicationCertificate.DisplayUaTcpImplementation( x => this.Text = x, this.Text, configuration);
       m_server.CertificateValidator.CertificateValidation += new CertificateValidationEventHandler(CertificateValidator_CertificateValidation);
       TrayIcon.Text = this.Text;
     }
@@ -88,11 +87,13 @@ namespace CAS.UA.Server.UserInterface
     {
       try
       {
-        Opc.Ua.Client.Controls.GuiUtils.HandleCertificateValidationError(this, validator, e);
+        string message = ApplicationCertificate.HandleCertificateValidationError( e);
+        if (MessageBox.Show(message, this.Text, MessageBoxButtons.YesNo) == DialogResult.Yes)
+          e.Accept = true;
       }
       catch (Exception exception)
       {
-        Opc.Ua.Client.Controls.GuiUtils.HandleException(this.Text, MethodBase.GetCurrentMethod(), exception);
+        HandleException(this.Text, MethodBase.GetCurrentMethod(), exception);
       }
     }
     private void TrayIcon_Click(object sender, EventArgs e)
