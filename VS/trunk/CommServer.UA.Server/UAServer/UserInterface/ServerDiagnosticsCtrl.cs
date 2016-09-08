@@ -20,7 +20,7 @@ using System.Windows.Forms;
 using Opc.Ua;
 using Opc.Ua.Server;
 
-namespace CAS.UA.Server.UserInterface
+namespace CAS.CommServer.UA.Server.Service.UserInterface
 {
     /// <summary>
     /// Displays diagnostics information for a server running within the process.

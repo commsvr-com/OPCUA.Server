@@ -16,7 +16,7 @@
 using CAS.UA.Server.ServerConfiguration;
 using Opc.Ua;
 
-namespace CAS.UA.Server
+namespace CAS.CommServer.UA.Server.Service
 {
   /// <summary>
   ///  A class that install, configures and runs a CAS UA application.
@@ -30,31 +30,31 @@ namespace CAS.UA.Server
     {
       this.ApplicationType = ApplicationType.Server;
       this.ConfigSectionName = "CAS.UA.Server";
-      this.ApplicationConfigurationType = typeof( CASConfiguration );
+      this.ApplicationConfigurationType = typeof(CASConfiguration);
 
     }
     /// <summary>
     /// Installs the server.
     /// </summary>
-    public static void InstallServer( string applicationAssemblyPath )
+    public static void InstallServer(string applicationAssemblyPath)
     {
       CASApplicationInstance application = new CASApplicationInstance();
-      string[] args = new string[ 2 ];
-      args[ 0 ] = "/silent";
-      args[ 1 ] = "/install";
-      application.ProcessCommandLine( true, applicationAssemblyPath, args );
+      string[] args = new string[2];
+      args[0] = "/silent";
+      args[1] = "/install";
+      application.ProcessCommandLine(true, applicationAssemblyPath, args);
     }
 
     /// <summary>
     /// Uninstalls the server.
     /// </summary>
-    public static void UnInstallServer( string applicationAssemblyPath )
+    public static void UnInstallServer(string applicationAssemblyPath)
     {
       CASApplicationInstance application = new CASApplicationInstance();
-      string[] args = new string[ 2 ];
-      args[ 0 ] = "/silent";
-      args[ 1 ] = "/uninstall";
-      application.ProcessCommandLine( true, applicationAssemblyPath, args );
+      string[] args = new string[2];
+      args[0] = "/silent";
+      args[1] = "/uninstall";
+      application.ProcessCommandLine(true, applicationAssemblyPath, args);
     }
   }
 }

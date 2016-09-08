@@ -13,11 +13,11 @@
 //  http://www.cas.eu
 //</summary>
 
+using CAS.CommServer.UA.Server.Service.Properties;
 using CAS.Lib.CodeProtect;
 using CAS.Lib.CodeProtect.Controls;
 using CAS.Lib.ControlLibrary;
 using CAS.Lib.RTLib.Processes;
-using CAS.UA.Server.Properties;
 using Opc.Ua;
 using Opc.Ua.Server;
 using System;
@@ -26,7 +26,7 @@ using System.Diagnostics;
 using System.Reflection;
 using System.Windows.Forms;
 
-namespace CAS.UA.Server.UserInterface
+namespace CAS.CommServer.UA.Server.Service.UserInterface
 {
   internal partial class ServerForm : Form
   {

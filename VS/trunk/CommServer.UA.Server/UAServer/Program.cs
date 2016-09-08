@@ -14,18 +14,19 @@
 //</summary>
 
 using CAS.CommServer.UA.Common;
+using CAS.CommServer.UA.Server.Service.Properties;
+using CAS.CommServer.UA.Server.Service.UserInterface;
 using CAS.Lib.CodeProtect;
 using CAS.Lib.RTLib.Utils;
 using CAS.UA.Server.Library;
-using CAS.UA.Server.Properties;
-using CAS.UA.Server.UserInterface;
 using Opc.Ua;
 using System;
 using System.IO;
 using System.Reflection;
 using System.Windows.Forms;
+using ConfigurationEditorMain = CAS.UA.Server.ServerConfiguration.Main;
 
-namespace CAS.UA.Server
+namespace CAS.CommServer.UA.Server.Service
 {
   static class Program
   {
@@ -64,7 +65,7 @@ namespace CAS.UA.Server
         CASApplicationInstance.UnInstallServer( Assembly.GetExecutingAssembly().Location );
       }
       CASApplicationInstance application = new CASApplicationInstance();
-      ServerConfiguration.Main config = new ServerConfiguration.Main();
+      ConfigurationEditorMain config = new ConfigurationEditorMain();
       try
       {
         if ( !Environment.UserInteractive )

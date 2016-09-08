@@ -172,9 +172,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DataBindings\DataBindings.csproj">
+    <ProjectReference Include="..\DataBindings\Server.DataBindings.csproj">
       <Project>{303CFB1D-CEF3-4ECC-B9FD-C7DFC6308810}</Project>
-      <Name>DataBindings</Name>
+      <Name>Server.DataBindings</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

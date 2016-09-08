@@ -13,7 +13,6 @@
 //  http://www.cas.eu
 //</summary>
 
-using CAS.UA.Server.DataSource.External;
 
 namespace CAS.UA.Server.DataBindings
 {
@@ -48,14 +47,11 @@ namespace CAS.UA.Server.DataBindings
       this.components = new System.ComponentModel.Container();
       this.m_DAClient = new CAS.Lib.OPCClient.Da.Main(this.components);
       this.m_CommServer = new CommServer.ProtocolHub.Communication.CommServerComponent(this.components);
-      this.m_ExternalDataSource = new ExternalDataSourceComponent(this.components);
-
     }
 
     #endregion
 
     private CAS.Lib.OPCClient.Da.Main m_DAClient;
     private CommServer.ProtocolHub.Communication.CommServerComponent m_CommServer;
-    private ExternalDataSourceComponent m_ExternalDataSource;
   }
 }

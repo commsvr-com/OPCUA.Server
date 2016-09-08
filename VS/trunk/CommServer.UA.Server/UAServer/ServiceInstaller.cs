@@ -20,7 +20,7 @@ using System.ComponentModel;
 using System.Configuration.Install;
 
 
-namespace CAS.UA.Server
+namespace CAS.CommServer.UA.Server.Service
 {
   /// <summary>
   /// Class ServiceInstaller - entry point for installer
