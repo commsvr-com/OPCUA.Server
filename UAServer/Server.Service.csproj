@@ -8,10 +8,10 @@
     <ProjectGuid>{B109EBAE-BB08-40A7-BB9E-7E56B9151B17}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>CAS.UA.Server</RootNamespace>
-    <AssemblyName>CAS.CommServerUA</AssemblyName>
+    <RootNamespace>CAS.CommServer.UA.Server.Service</RootNamespace>
+    <AssemblyName>CAS.CommServer.UA.Server.Service</AssemblyName>
     <ApplicationIcon>commserverua.ico</ApplicationIcon>
-    <StartupObject>CAS.UA.Server.Program</StartupObject>
+    <StartupObject>CAS.CommServer.UA.Server.Service.Program</StartupObject>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <OldToolsVersion>3.5</OldToolsVersion>
@@ -49,7 +49,7 @@
     <WarningLevel>4</WarningLevel>
     <PlatformTarget>x86</PlatformTarget>
     <UseVSHostingProcess>false</UseVSHostingProcess>
-    <DocumentationFile>bin\Debug\CAS.CommServerUA.xml</DocumentationFile>
+    <DocumentationFile>bin\Debug\CAS.CommServer.UA.Server.Service.xml</DocumentationFile>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -181,7 +181,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Help\ASModelDesigner.chm" />
     <None Include="packages.config" />
     <None Include="Properties\AssemblyInfo.tt">
@@ -215,13 +217,13 @@
       <Project>{234A138E-4E17-4F12-84A3-A920DDAE0D86}</Project>
       <Name>LicensesContainer</Name>
     </ProjectReference>
-    <ProjectReference Include="..\UALibrary\UALibrary.csproj">
+    <ProjectReference Include="..\UALibrary\Server.Library.csproj">
       <Project>{5A647CC0-5FD8-476B-8C14-8A9CED9CF5BE}</Project>
-      <Name>UALibrary</Name>
+      <Name>Server.Library</Name>
     </ProjectReference>
-    <ProjectReference Include="..\DataBindings\DataBindings.csproj">
+    <ProjectReference Include="..\DataBindings\Server.DataBindings.csproj">
       <Project>{303CFB1D-CEF3-4ECC-B9FD-C7DFC6308810}</Project>
-      <Name>DataBindings</Name>
+      <Name>Server.DataBindings</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -191,12 +191,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DataSourceExternal\DataSourceExternal.csproj">
-      <Project>{0868418e-f4b0-42d5-961a-e037c42132c9}</Project>
-      <Name>DataSourceExternal</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="DataBindingsManager.resx">
       <DependentUpon>DataBindingsManager.cs</DependentUpon>
     </EmbeddedResource>

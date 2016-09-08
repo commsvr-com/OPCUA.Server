@@ -1,4 +1,4 @@
-﻿namespace CAS.UA.Server
+﻿namespace CAS.CommServer.UA.Server.Service
 {
   partial class ServiceInstaller
   {

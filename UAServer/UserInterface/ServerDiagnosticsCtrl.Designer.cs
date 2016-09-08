@@ -12,9 +12,9 @@
 //  mailto://techsupp@cas.eu
 //  http://www.cas.eu
 //</summary>
-      
 
-namespace CAS.UA.Server.UserInterface
+
+namespace CAS.CommServer.UA.Server.Service.UserInterface
 {
     partial class ServerDiagnosticsCtrl
     {

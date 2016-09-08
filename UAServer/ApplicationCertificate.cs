@@ -19,7 +19,7 @@ using System.Collections.Generic;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 
-namespace CAS.UA.Server
+namespace CAS.CommServer.UA.Server.Service
 {
   /// <summary>
   /// Class ApplicationCertificate - helper class providing application instance certificate management functionality
