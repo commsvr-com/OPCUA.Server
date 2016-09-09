@@ -47,7 +47,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <PlatformTarget>x86</PlatformTarget>
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <DocumentationFile>bin\Debug\CAS.CommServer.UA.Server.Service.xml</DocumentationFile>
     <Prefer32Bit>false</Prefer32Bit>
@@ -213,10 +213,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\PR39-CommonResources\LicensesContainer\LicensesContainer.csproj">
-      <Project>{234A138E-4E17-4F12-84A3-A920DDAE0D86}</Project>
-      <Name>LicensesContainer</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Server.Library\Server.Library.csproj">
       <Project>{5A647CC0-5FD8-476B-8C14-8A9CED9CF5BE}</Project>
       <Name>Server.Library</Name>
