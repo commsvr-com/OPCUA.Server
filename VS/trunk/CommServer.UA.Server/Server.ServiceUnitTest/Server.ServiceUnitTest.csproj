@@ -125,7 +125,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <ProjectReference Include="..\UAServer\Server.Service.csproj">
+    <ProjectReference Include="..\Server.Service\Server.Service.csproj">
       <Project>{b109ebae-bb08-40a7-bb9e-7e56b9151b17}</Project>
       <Name>Server.Service</Name>
     </ProjectReference>
