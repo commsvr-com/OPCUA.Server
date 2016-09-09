@@ -273,15 +273,17 @@ namespace CAS.CommServer.UA.Server.Service
     /// <summary>
     /// The extension method handles a certificate validation error and produces message to be displayed.
     /// </summary>
-    public static string HandleCertificateValidationError(this CertificateValidationEventArgs e)
+    public static string HandleCertificateValidationError(this CertificateValidationEventArgs certificateValidationEventArgs)
     {
+      if (certificateValidationEventArgs == null)
+        throw new ArgumentNullException(nameof(certificateValidationEventArgs));
       StringBuilder buffer = new StringBuilder();
-      buffer.AppendFormat("Certificate could not be validated: {0}\r\n\r\n", e.Error.StatusCode);
-      buffer.AppendFormat("Subject: {0}\r\n", e.Certificate.Subject);
-      buffer.AppendFormat("Issuer: {0}\r\n", (e.Certificate.Subject == e.Certificate.Issuer) ? "Self-signed" : e.Certificate.Issuer);
-      buffer.AppendFormat("Valid From: {0}\r\n", e.Certificate.NotBefore);
-      buffer.AppendFormat("Valid To: {0}\r\n", e.Certificate.NotAfter);
-      buffer.AppendFormat("Thumbprint: {0}\r\n\r\n", e.Certificate.Thumbprint);
+      buffer.AppendFormat("Certificate could not be validated: {0}\r\n\r\n", certificateValidationEventArgs.Error.StatusCode);
+      buffer.AppendFormat("Subject: {0}\r\n", certificateValidationEventArgs.Certificate.Subject);
+      buffer.AppendFormat("Issuer: {0}\r\n", (certificateValidationEventArgs.Certificate.Subject == certificateValidationEventArgs.Certificate.Issuer) ? "Self-signed" : certificateValidationEventArgs.Certificate.Issuer);
+      buffer.AppendFormat("Valid From: {0}\r\n", certificateValidationEventArgs.Certificate.NotBefore);
+      buffer.AppendFormat("Valid To: {0}\r\n", certificateValidationEventArgs.Certificate.NotAfter);
+      buffer.AppendFormat("Thumbprint: {0}\r\n\r\n", certificateValidationEventArgs.Certificate.Thumbprint);
       buffer.AppendFormat("Accept anyways?");
       return buffer.ToString();
     }

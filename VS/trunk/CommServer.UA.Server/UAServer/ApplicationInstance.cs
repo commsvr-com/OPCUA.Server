@@ -987,7 +987,7 @@ namespace CAS.CommServer.UA.Server.Service
       {
         // load the configuration file.
         CASConfiguration configuration = CASConfiguration.Load(
-            new System.IO.FileInfo(filePath),
+            new FileInfo(filePath),
             applicationType,
             applicationConfigurationType,
             applyTraceSettings);
