@@ -7,9 +7,7 @@ using System.IO;
 
 namespace CAS.CommServer.UA.Server.Service.UnitTest
 {
-
   [TestClass]
-  [DeploymentItem(@"EmbeddedExample\DemoConfiguration\", @"EmbeddedExample\DemoConfiguration\")]
   public class CASApplicationInstanceUnitTest
   {
     [TestMethod]
