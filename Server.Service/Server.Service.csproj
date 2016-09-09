@@ -217,10 +217,6 @@
       <Project>{5A647CC0-5FD8-476B-8C14-8A9CED9CF5BE}</Project>
       <Name>Server.Library</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Server.DataBindings\Server.DataBindings.csproj">
-      <Project>{303CFB1D-CEF3-4ECC-B9FD-C7DFC6308810}</Project>
-      <Name>Server.DataBindings</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="commserver.ico" />
