@@ -74,10 +74,6 @@
       <HintPath>..\packages\CAS.CommServer.DA.Client.2.00.14-Foxtrot\lib\net451\CAS.CommServer.DA.Client.Services.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="CAS.CommServer.DA.ItemDescriber, Version=1.0.2.22851, Culture=neutral, PublicKeyToken=8832ff1a67ea61a3, processorArchitecture=MSIL">
-      <HintPath>..\packages\CAS.CommServer.DA.ItemDescriber.1.00.2-Echo\lib\net451\CAS.CommServer.DA.ItemDescriber.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="CAS.CommServer.DAClientConfiguration, Version=5.1.2.14790, Culture=neutral, PublicKeyToken=8832ff1a67ea61a3, processorArchitecture=MSIL">
       <HintPath>..\packages\CAS.CommServer.DAClientConfiguration.5.01.02-Delta\lib\net451\CAS.CommServer.DAClientConfiguration.dll</HintPath>
       <Private>True</Private>
