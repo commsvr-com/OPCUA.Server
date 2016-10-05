@@ -98,12 +98,16 @@
       <HintPath>..\packages\CAS.CommServer.OPCClassic.SDK.COMWrapper.2.01.1061-Bravo\lib\net451\CAS.CommServer.OPCClassicSDK.OpcComRcw.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="CAS.CommServer.ProtocolHub.Communication, Version=4.0.22.17955, Culture=neutral, PublicKeyToken=8832ff1a67ea61a3, processorArchitecture=MSIL">
-      <HintPath>..\packages\CAS.CommServer.ProtocolHub.Communication.4.00.22-Bravo\lib\net451\CAS.CommServer.ProtocolHub.Communication.dll</HintPath>
+    <Reference Include="CAS.CommServer.ProtocolHub.Communication, Version=4.0.22.14427, Culture=neutral, PublicKeyToken=8832ff1a67ea61a3, processorArchitecture=MSIL">
+      <HintPath>..\packages\CAS.CommServer.ProtocolHub.Communication.4.00.22-Charlie\lib\net451\CAS.CommServer.ProtocolHub.Communication.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="CAS.CommServer.ProtocolHub.MonitorInterface, Version=4.0.22.17954, Culture=neutral, PublicKeyToken=8832ff1a67ea61a3, processorArchitecture=MSIL">
-      <HintPath>..\packages\CAS.CommServer.ProtocolHub.Communication.4.00.22-Bravo\lib\net451\CAS.CommServer.ProtocolHub.MonitorInterface.dll</HintPath>
+    <Reference Include="CAS.CommServer.ProtocolHub.ItemDescriber, Version=1.0.2.37417, Culture=neutral, PublicKeyToken=8832ff1a67ea61a3, processorArchitecture=MSIL">
+      <HintPath>..\packages\CAS.CommServer.ProtocolHub.ItemDescriber.1.00.2-Golf\lib\net451\CAS.CommServer.ProtocolHub.ItemDescriber.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="CAS.CommServer.ProtocolHub.MonitorInterface, Version=4.0.22.14427, Culture=neutral, PublicKeyToken=8832ff1a67ea61a3, processorArchitecture=MSIL">
+      <HintPath>..\packages\CAS.CommServer.ProtocolHub.Communication.4.00.22-Charlie\lib\net451\CAS.CommServer.ProtocolHub.MonitorInterface.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="CAS.CommServer.UA.Common, Version=3.0.2.22275, Culture=neutral, PublicKeyToken=8832ff1a67ea61a3, processorArchitecture=MSIL">
@@ -176,7 +180,9 @@
     <None Include="cas.snk" />
     <None Include="DemoConfiguration.oses" />
     <None Include="Help\ASModelDesigner.chm" />
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Properties\AssemblyInfo.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>AssemblyInfo.cs</LastGenOutput>
