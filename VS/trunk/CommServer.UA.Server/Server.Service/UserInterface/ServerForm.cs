@@ -15,9 +15,9 @@
 
 using CAS.CommServer.UA.Server.Service.Properties;
 using CAS.Lib.CodeProtect;
-using CAS.Lib.CodeProtect.Controls;
 using CAS.Lib.ControlLibrary;
 using CAS.Lib.RTLib.Processes;
+using CAS.Windows.Forms.CodeProtectControls;
 using Opc.Ua;
 using Opc.Ua.Server;
 using System;
@@ -221,7 +221,7 @@ namespace CAS.CommServer.UA.Server.Service.UserInterface
     {
       using (LicenseForm dial = new LicenseForm(Properties.Resources.about_CommServer, "Free ware", Assembly.GetEntryAssembly()))
       {
-        Licences cLicDial = new Licences();
+        Licenses cLicDial = new Licenses();
         dial.SetAdditionalControl = cLicDial;
         dial.LicenceRequestMessageProvider
           = new LicenseForm.LicenceRequestMessageProviderDelegate(
@@ -251,7 +251,7 @@ namespace CAS.CommServer.UA.Server.Service.UserInterface
 
     private void enterUnlockCodeToolStripMenuItem_Click(object sender, EventArgs e)
     {
-      using (UlockKeyDialog dialog = new UlockKeyDialog())
+      using (UnlockKeyDialog dialog = new UnlockKeyDialog())
       {
         dialog.ShowDialog();
       }

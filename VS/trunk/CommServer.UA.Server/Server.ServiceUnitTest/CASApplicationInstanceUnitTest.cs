@@ -33,7 +33,7 @@ namespace CAS.CommServer.UA.Server.Service.UnitTest
     public void LoadApplicationConfigurationTest()
     {
       Debug.WriteLine(Environment.CurrentDirectory);
-      FileInfo file = new FileInfo(Utils.Format("{0}\\{1}", Environment.CurrentDirectory, @"EmbeddedExample\DemoConfiguration\BoilerExample.uasconfig"));
+      FileInfo file = new FileInfo(Path.Combine(Environment.CurrentDirectory, @"EmbeddedExample\DemoConfiguration\BoilerExample.uasconfig"));
       Assert.IsTrue(file.Exists, $"Wrong deployment file doesn't exist {file.FullName}");
       using (Main _main = new Main())
       {
