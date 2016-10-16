@@ -89,7 +89,7 @@ namespace CAS.CommServer.UA.Server.Service
       {
         try
         {
-          LibInstaller.InstalLicense( true );
+          LibInstaller.InstallLicense( true );
         }
         catch ( Exception ex )
         {
