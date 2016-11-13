@@ -1,0 +1,37 @@
+﻿<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ output extension=".nuspec" #>
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>Opc.Ua.Server</id>
+    <version><#= OPCUASDKVersion #><#= OPCUASDKPrerelease #></version>
+    <title>OPC UA SDK Server</title>
+    <authors><#=AssemblyCompany#></authors>
+    <owners><#=Owner#></owners>
+    <projectUrl>svn://svnserver.hq.cas.com.pl/VS/trunk/EX04-OPC.UA.SDK/1_01_326/Stack/Source/Common/Server</projectUrl>
+    <licenseUrl>http://www.commsvr.com/DownloadCenter/ProductSoftware/LicenseAgreement.aspx</licenseUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <developmentDependency>false</developmentDependency>
+    <description>
+      OPC UA Server implementation provided by OPC Foundation and refactored by CAS.
+    </description>
+    <summary>
+      OPC UA SDK Server
+    </summary>
+    <releaseNotes>
+      Released for Maintenance 2016
+    </releaseNotes>
+    <copyright><#=AssemblyCopyright#></copyright>
+    <tags>OPC SDK, OPC UA, CommServer, OPC UA Stack, OPC Foundation.</tags>
+    <dependencies>
+        <dependency id="OPC.UA.SDK.Core" version="1.01.326" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="bin\Release\Opc.Ua.Server.dll" target="lib\net451\Opc.Ua.Server.dll" />
+    <file src="bin\Release\Opc.Ua.Server.pdb" target="lib\net451\Opc.Ua.Server.pdb" />
+    <file src="bin\Release\Opc.Ua.Server.XML" target="lib\net451\Opc.Ua.Server.XML" />
+  </files>
+</package>
+
+<#@ include file = "..\..\..\..\..\..\PR39-CommonResources\T4Definitions\OPC.t4" #>
