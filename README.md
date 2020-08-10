@@ -38,17 +38,11 @@ Consider the descriptions:
 
 ### How to be rewarded
 
-As a result of participation in the sponsorship program, direct contribution or using the deliverables as the end user you
+As a result of direct contribution to the OPC UA SDK development or using the deliverables as the end user you
 
-- can directly influence further development of the OOI prioritizing the tasks backlog
-- will access OOI documentation and deliverables
-- may use the deliverables in commercial products
-- may distribute the deliverables including source code
-- will have opportunities to join working groups, online discussion groups, and collaborations for new technology initiatives
-- will have access to and direct contribution to new publications
-- will make use of the OOI logo
-- will have the opportunity to list your products in the online product guide
-- will have the opportunity to announce new solutions and products online
+- can directly influence further development of the OPC UA SDK prioritizing the tasks in the backlog
+- will access OPC UA SDK documentation and deliverables
+- will have opportunities to join collaborations for new technology initiatives
 
 ### Standard development and maintenance
 
